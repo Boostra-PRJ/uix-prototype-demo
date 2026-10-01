@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Стенд UIX-Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/stand.css">
+</head>
+<body>
+  <div class="stand ds" data-color-scheme="light" data-typography="main" data-responsive="desktop">
+    <img class="stand-logo" src="assets/logo-uix.svg" width="178" height="72" alt="Booostra Team UIX">
+    <main class="stage" id="stage">
+      <div class="device-holder" id="deviceHolder">
+        <div class="device" id="device">
+          <div class="screen ds" id="screen" data-color-scheme="light" data-typography="main" data-responsive="mobile" data-size="app" data-platform="app">
+            <div class="status-bar" aria-hidden="true">
+              <p class="status-time">7:40</p>
+              <span class="status-levels"></span>
+              <span class="status-camera"></span>
+            </div>
+            <div class="slot" role="region" aria-label="Экран прототипа">
+              <p class="slot-note t-note" id="slotNote"></p>
+            </div>
+            <div class="home-indicator" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="controls">
+      <div class="select" id="uiMode">
+        <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="uiMode-list" aria-labelledby="uiMode-label uiMode-value">
+          <span class="select-text">
+            <span class="select-label" id="uiMode-label">UI Mode</span>
+            <span class="select-value t-note" id="uiMode-value"></span>
+          </span>
+          <span class="select-chevron" aria-hidden="true">
+            <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
+            <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
+          </span>
+        </button>
+        <ul class="select-list" id="uiMode-list" role="listbox" aria-labelledby="uiMode-label"></ul>
+      </div>
+      <fieldset class="sizes">
+        <legend class="visually-hidden">Размер экрана</legend>
+        <div class="size-item">
+          <button class="btn-secondary" type="button" data-size-button="xlarge" data-size-btn="app" aria-pressed="false" aria-label="App — приложение">
+            <span class="btn-content"><img src="assets/brand-apple.svg" width="20" height="20" alt=""></span>
+          </button>
+          <span class="t-caption" aria-hidden="true">App</span>
+        </div>
+        <div class="size-item">
+          <button class="btn-secondary" type="button" data-size-button="xlarge" data-size-btn="mobile" aria-pressed="false" aria-label="Mobile — браузер на телефоне">
+            <span class="btn-content"><img src="assets/device-mobile.svg" width="20" height="20" alt=""></span>
+          </button>
+          <span class="t-caption" aria-hidden="true">Mobile</span>
+        </div>
+        <div class="size-item">
+          <button class="btn-secondary" type="button" data-size-button="xlarge" data-size-btn="tablet" aria-pressed="false" aria-label="Tablet — планшет">
+            <span class="btn-content"><img src="assets/device-ipad.svg" width="20" height="20" alt=""></span>
+          </button>
+          <span class="t-caption" aria-hidden="true">Tablet</span>
+        </div>
+        <div class="size-item">
+          <button class="btn-secondary" type="button" data-size-button="xlarge" data-size-btn="desktop" aria-pressed="false" aria-label="Desktop — десктоп">
+            <span class="btn-content"><img src="assets/device-desktop.svg" width="20" height="20" alt=""></span>
+          </button>
+          <span class="t-caption" aria-hidden="true">Desktop</span>
+        </div>
+      </fieldset>
+      <div class="select" id="uxFlow">
+        <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="uxFlow-list" aria-labelledby="uxFlow-label uxFlow-value">
+          <span class="select-text">
+            <span class="select-label" id="uxFlow-label">UX Flow</span>
+            <span class="select-value t-note" id="uxFlow-value"></span>
+          </span>
+          <span class="select-chevron" aria-hidden="true">
+            <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
+            <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
+          </span>
+        </button>
+        <ul class="select-list" id="uxFlow-list" role="listbox" aria-labelledby="uxFlow-label"></ul>
+      </div>
+    </footer>
+  </div>
+  <script src="js/stand.js"></script>
+</body>
+</html>
