@@ -11,20 +11,13 @@ button { font: inherit; color: inherit; }
   background: var(--palette-backgrounds-grouped-primary);
   color: var(--text-bottom-default);
 }
-.stand-logo {
-  position: absolute;
-  top: var(--space-7xl);
-  right: var(--space-7xl);
-  width: 178px;
-  height: 72px;
-}
 .stage {
   display: flex;
   flex: 1 0 0;
   min-height: 0;
   align-items: center;
   justify-content: center;
-  margin: calc(var(--space-7xl) + 72px) var(--space-7xl) 0;
+  margin: var(--space-7xl) var(--space-7xl) 0;
 }
 .device-holder {
   display: flex;
@@ -158,7 +151,7 @@ button { font: inherit; color: inherit; }
 }
 .size-item .t-caption {
   width: 100%;
-  color: var(--text-primary-secondary);
+  color: var(--text-bottom-secondary);
   text-align: center;
 }
 .visually-hidden {
@@ -170,8 +163,7 @@ button { font: inherit; color: inherit; }
   white-space: nowrap;
 }
 @media (max-width: 760px) {
-  .stand-logo { top: var(--space-lg); right: var(--space-lg); width: 111px; height: 45px; }
-  .stage { margin: calc(var(--space-lg) * 2 + 45px) var(--space-lg) 0; }
+  .stage { margin: var(--space-lg) var(--space-lg) 0; }
   .controls { flex-wrap: wrap; padding: var(--space-lg); }
   .controls .select { width: calc(50% - var(--space-lg) / 2); }
   .sizes { order: 3; width: 100%; justify-content: center; }
