@@ -20,8 +20,7 @@
   ];
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var FIT = { scale: 1, fill: 1 };
-  var state = { ui: 'light', size: 'app', flow: 'default', fit: 'scale' };
+  var state = { ui: 'light', size: 'app', flow: 'default' };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -33,14 +32,12 @@
     if (UI[ui]) state.ui = ui;
     if (SIZE[params.get('size')]) state.size = params.get('size');
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
-    if (FIT[params.get('fit')]) state.fit = params.get('fit');
   }
   function writeHash() {
     var params = new URLSearchParams();
     params.set('ui', state.ui);
     params.set('size', state.size);
     params.set('flow', state.flow);
-    params.set('fit', state.fit);
     history.replaceState(null, '', '#' + params.toString());
   }
   function apply() {
@@ -50,7 +47,6 @@
     screen.setAttribute('data-responsive', size.responsive);
     screen.setAttribute('data-platform', size.platform);
     screen.setAttribute('data-size', state.size);
-    screen.setAttribute('data-fit', state.fit);
     document.querySelectorAll('[data-size-btn]').forEach(function (btn) {
       btn.setAttribute('aria-pressed', String(btn.getAttribute('data-size-btn') === state.size));
     });
@@ -63,23 +59,12 @@
   function fit() {
     var size = SIZE[state.size];
     var frame = parseFloat(getComputedStyle(device).paddingTop) || 0;
+    var w = size.w + frame * 2, h = size.h + frame * 2;
     var box = stage.getBoundingClientRect();
-    var w = size.w, h = size.h, scale;
-    if (state.fit === 'fill' && size.responsive !== 'mobile') {
-      var cs = getComputedStyle(screen);
-      var wMin = parseFloat(cs.getPropertyValue('--responsive-w-min')) || 0;
-      var wMax = parseFloat(cs.getPropertyValue('--responsive-w-max')) || Infinity;
-      w = Math.min(wMax, Math.max(wMin, box.width - frame * 2));
-      scale = Math.min(1, box.width / (w + frame * 2));
-      h = Math.max(1, box.height / scale - frame * 2);
-    } else {
-      scale = Math.min(1, box.width / (w + frame * 2), box.height / (h + frame * 2));
-    }
-    screen.style.width = w + 'px';
-    screen.style.height = h + 'px';
+    var scale = Math.min(1, box.width / w, box.height / h);
     device.style.transform = 'scale(' + scale + ')';
-    holder.style.width = (w + frame * 2) * scale + 'px';
-    holder.style.height = (h + frame * 2) * scale + 'px';
+    holder.style.width = w * scale + 'px';
+    holder.style.height = h * scale + 'px';
   }
   function makeSelect(root, groups, onPick) {
     var field = root.querySelector('.select-field');
