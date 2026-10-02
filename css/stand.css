@@ -162,9 +162,22 @@ button { font: inherit; color: inherit; }
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-@media (max-width: 760px) {
+@media (max-width: 1279px) {
+  .stage { margin: var(--space-3xl) var(--space-3xl) 0; }
+  .controls { padding: var(--space-lg) var(--space-3xl); }
+}
+@media (max-width: 767px) {
   .stage { margin: var(--space-lg) var(--space-lg) 0; }
-  .controls { flex-wrap: wrap; padding: var(--space-lg); }
-  .controls .select { width: calc(50% - var(--space-lg) / 2); }
-  .sizes { order: 3; width: 100%; justify-content: center; }
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+  }
+  .sizes {
+    order: -1;
+    justify-content: center;
+    margin-bottom: calc(var(--space-lg) - var(--space-md));
+  }
+  .controls .select { width: 100%; }
 }
