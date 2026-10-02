@@ -15,7 +15,10 @@
   };
   var FLOW_GROUPS = [
     { items: {
-      'default': { label: 'Default', icon: 'assets/flow-default.svg' }
+      'default': { label: 'Default', icon: 'assets/flow-default.svg' },
+      'flow-1':  { label: 'Flow 1',  icon: 'assets/flow-1.svg' },
+      'flow-2':  { label: 'Flow 2',  icon: 'assets/flow-2.svg' },
+      'flow-3':  { label: 'Flow 3',  icon: 'assets/flow-3.svg' }
     } }
   ];
   var FLOW = {};
