@@ -3,6 +3,7 @@
 .flow-screen:empty { display: none; }
 .flow-screen { position: absolute; inset: 0; }
 .uxd {
+  --uxd-cycle: 18s;
   position: absolute;
   inset: 0;
   display: flex;
@@ -33,7 +34,6 @@
   mask: url("../assets/uix-team-wordmark.svg") center / 100% 100% no-repeat;
 }
 .uxd-track {
-  --uxd-cycle: 18s;
   position: absolute;
   left: 50%;
   top: -160px;
@@ -88,7 +88,74 @@
    88.899% { transform: scale(0); background: var(--vibe-fresh); }
     100.0% { transform: scale(1); background: var(--vibe-fresh); }
 }
+.uxd-shape { display: block; width: 100%; height: 100%; }
+.uxd-trail { display: none; }
+.screen[data-fx~="stretch"] .uxd-shape { animation: uxd-stretch var(--uxd-cycle) ease-in-out infinite; }
+@keyframes uxd-stretch {
+  0.0% { transform: scale(1, 1); }
+  2.778% { transform: scale(0.8, 1.4); }
+  5.556% { transform: scale(1, 1); }
+  5.567% { transform: scale(1.25, 0.75); }
+  9.444% { transform: scale(1, 1); }
+  16.667% { transform: scale(1, 1); }
+  19.444% { transform: scale(0.8, 1.4); }
+  22.222% { transform: scale(1, 1); }
+  22.233% { transform: scale(1.25, 0.75); }
+  26.111% { transform: scale(1, 1); }
+  33.333% { transform: scale(1, 1); }
+  36.111% { transform: scale(0.8, 1.4); }
+  38.889% { transform: scale(1, 1); }
+  38.9% { transform: scale(1.25, 0.75); }
+  42.778% { transform: scale(1, 1); }
+  50.0% { transform: scale(1, 1); }
+  52.778% { transform: scale(0.8, 1.4); }
+  55.556% { transform: scale(1, 1); }
+  55.567% { transform: scale(1.25, 0.75); }
+  59.444% { transform: scale(1, 1); }
+  66.667% { transform: scale(1, 1); }
+  69.444% { transform: scale(0.8, 1.4); }
+  72.222% { transform: scale(1, 1); }
+  72.233% { transform: scale(1.25, 0.75); }
+  76.111% { transform: scale(1, 1); }
+  83.333% { transform: scale(1, 1); }
+  86.111% { transform: scale(0.8, 1.4); }
+  88.889% { transform: scale(1, 1); }
+  88.9% { transform: scale(1.25, 0.75); }
+  92.778% { transform: scale(1, 1); }
+  100% { transform: scale(1, 1); }
+}
+.screen[data-fx~="trail"] .uxd-trail { display: block; }
+.uxd-trail-1, .uxd-trail-1 .uxd-shape, .uxd-trail-1 .uxd-glow { animation-delay: 0.1s; }
+.uxd-trail-2, .uxd-trail-2 .uxd-shape, .uxd-trail-2 .uxd-glow { animation-delay: 0.2s; }
+.uxd-trail-1 .uxd-glow { opacity: 0.35; }
+.uxd-trail-2 .uxd-glow { opacity: 0.2; }
+.screen[data-fx~="logo"] .uxd-logo { animation: uxd-logo var(--uxd-cycle) linear infinite; }
+@keyframes uxd-logo {
+  0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  1.111% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  2.778% { transform: scale(1.03); filter: drop-shadow(0 0 18px var(--vibe-fresh)); }
+  5.278% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  17.778% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  19.444% { transform: scale(1.03); filter: drop-shadow(0 0 18px var(--vibe-flamingo)); }
+  21.944% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  34.444% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  36.111% { transform: scale(1.03); filter: drop-shadow(0 0 18px var(--brand-primary)); }
+  38.611% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  51.111% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  52.778% { transform: scale(1.03); filter: drop-shadow(0 0 18px var(--vibe-fresh)); }
+  55.278% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  67.778% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  69.444% { transform: scale(1.03); filter: drop-shadow(0 0 18px var(--vibe-flamingo)); }
+  71.944% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  84.444% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  86.111% { transform: scale(1.03); filter: drop-shadow(0 0 18px var(--brand-primary)); }
+  88.611% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+}
 @media (prefers-reduced-motion: reduce) {
   .uxd-track,
-  .uxd-glow { animation: none; }
+  .uxd-shape,
+  .uxd-glow,
+  .uxd-logo { animation: none; }
+  .uxd-trail { display: none; }
 }

@@ -21,10 +21,14 @@
       'flow-3':  { label: 'Flow 3',  icon: 'assets/flow-3.svg' }
     } }
   ];
+  function glowLayer(cls) {
+    return '<span class="uxd-track' + (cls ? ' ' + cls : '') + '" aria-hidden="true">' +
+      '<span class="uxd-shape"><span class="uxd-glow"></span></span></span>';
+  }
   var SCREENS = {
     'uix-default':
       '<div class="uxd">' +
-        '<span class="uxd-track" aria-hidden="true"><span class="uxd-glow"></span></span>' +
+        glowLayer('uxd-trail uxd-trail-2') + glowLayer('uxd-trail uxd-trail-1') + glowLayer('') +
         '<div class="uxd-logo" role="img" aria-label="{UIX} team">' +
           '<span class="uxd-mark"></span><span class="uxd-wordmark"></span>' +
         '</div>' +
@@ -32,7 +36,8 @@
   };
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var state = { ui: 'light', size: 'app', flow: 'default' };
+  var FX = { stretch: 1, trail: 1, logo: 1 };
+  var state = { ui: 'light', size: 'app', flow: 'default', fx: [] };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -46,13 +51,15 @@
     if (UI[ui]) state.ui = ui;
     if (SIZE[params.get('size')]) state.size = params.get('size');
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
+    state.fx = (params.get('fx') || '').split(',').filter(function (k) { return FX[k]; });
   }
   function writeHash() {
     var params = new URLSearchParams();
     params.set('ui', state.ui);
     params.set('size', state.size);
     params.set('flow', state.flow);
-    history.replaceState(null, '', '#' + params.toString());
+    if (state.fx.length) params.set('fx', state.fx.join(','));
+    history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
     var ui = UI[state.ui], size = SIZE[state.size];
@@ -61,6 +68,7 @@
     screen.setAttribute('data-responsive', size.responsive);
     screen.setAttribute('data-platform', size.platform);
     screen.setAttribute('data-size', state.size);
+    screen.setAttribute('data-fx', state.fx.join(' '));
     document.querySelectorAll('[data-size-btn]').forEach(function (btn) {
       btn.setAttribute('aria-pressed', String(btn.getAttribute('data-size-btn') === state.size));
     });
