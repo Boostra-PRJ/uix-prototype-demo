@@ -33,7 +33,7 @@
   mask: url("../assets/uix-team-wordmark.svg") center / 100% 100% no-repeat;
 }
 .uxd-track {
-  --uxd-cycle: 36s;
+  --uxd-cycle: 18s;
   position: absolute;
   left: 50%;
   top: -160px;
@@ -54,38 +54,38 @@
 }
 @keyframes uxd-move {
       0.0% { top: -160px; }
-    8.333% { top: calc(100% - 160px); }
+    5.556% { top: calc(100% - 160px); }
    16.667% { top: calc(100% - 160px); }
-     25.0% { top: -160px; }
+   22.222% { top: -160px; }
    33.333% { top: -160px; }
-   41.667% { top: calc(100% - 160px); }
+   38.889% { top: calc(100% - 160px); }
      50.0% { top: calc(100% - 160px); }
-   58.333% { top: -160px; }
+   55.556% { top: -160px; }
    66.667% { top: -160px; }
-     75.0% { top: calc(100% - 160px); }
+   72.222% { top: calc(100% - 160px); }
    83.333% { top: calc(100% - 160px); }
-   91.667% { top: -160px; }
+   88.889% { top: -160px; }
     100.0% { top: -160px; }
 }
 @keyframes uxd-pulse {
       0.0% { transform: scale(1); background: var(--vibe-fresh); }
-    8.333% { transform: scale(0); background: var(--vibe-fresh); }
-    8.343% { transform: scale(0); background: var(--vibe-flamingo); }
+    5.556% { transform: scale(0); background: var(--vibe-fresh); }
+    5.566% { transform: scale(0); background: var(--vibe-flamingo); }
    16.667% { transform: scale(1); background: var(--vibe-flamingo); }
-     25.0% { transform: scale(0); background: var(--vibe-flamingo); }
-    25.01% { transform: scale(0); background: var(--brand-primary); }
+   22.222% { transform: scale(0); background: var(--vibe-flamingo); }
+   22.232% { transform: scale(0); background: var(--brand-primary); }
    33.333% { transform: scale(1); background: var(--brand-primary); }
-   41.667% { transform: scale(0); background: var(--brand-primary); }
-   41.677% { transform: scale(0); background: var(--vibe-fresh); }
+   38.889% { transform: scale(0); background: var(--brand-primary); }
+   38.899% { transform: scale(0); background: var(--vibe-fresh); }
      50.0% { transform: scale(1); background: var(--vibe-fresh); }
-   58.333% { transform: scale(0); background: var(--vibe-fresh); }
-   58.343% { transform: scale(0); background: var(--vibe-flamingo); }
+   55.556% { transform: scale(0); background: var(--vibe-fresh); }
+   55.566% { transform: scale(0); background: var(--vibe-flamingo); }
    66.667% { transform: scale(1); background: var(--vibe-flamingo); }
-     75.0% { transform: scale(0); background: var(--vibe-flamingo); }
-    75.01% { transform: scale(0); background: var(--brand-primary); }
+   72.222% { transform: scale(0); background: var(--vibe-flamingo); }
+   72.232% { transform: scale(0); background: var(--brand-primary); }
    83.333% { transform: scale(1); background: var(--brand-primary); }
-   91.667% { transform: scale(0); background: var(--brand-primary); }
-   91.677% { transform: scale(0); background: var(--vibe-fresh); }
+   88.889% { transform: scale(0); background: var(--brand-primary); }
+   88.899% { transform: scale(0); background: var(--vibe-fresh); }
     100.0% { transform: scale(1); background: var(--vibe-fresh); }
 }
 @media (prefers-reduced-motion: reduce) {
