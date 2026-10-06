@@ -15,12 +15,21 @@
   };
   var FLOW_GROUPS = [
     { items: {
-      'default': { label: 'Default', icon: 'assets/flow-default.svg' },
+      'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
       'flow-1':  { label: 'Flow 1',  icon: 'assets/flow-1.svg' },
       'flow-2':  { label: 'Flow 2',  icon: 'assets/flow-2.svg' },
       'flow-3':  { label: 'Flow 3',  icon: 'assets/flow-3.svg' }
     } }
   ];
+  var SCREENS = {
+    'uix-default':
+      '<div class="uxd">' +
+        '<span class="uxd-track" aria-hidden="true"><span class="uxd-glow"></span></span>' +
+        '<div class="uxd-logo" role="img" aria-label="{UIX} team">' +
+          '<span class="uxd-mark"></span><span class="uxd-wordmark"></span>' +
+        '</div>' +
+      '</div>'
+  };
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
   var state = { ui: 'light', size: 'app', flow: 'default' };
@@ -29,6 +38,8 @@
   var stage = document.getElementById('stage');
   var holder = document.getElementById('deviceHolder');
   var slotNote = document.getElementById('slotNote');
+  var flowScreen = document.getElementById('flowScreen');
+  var shownScreen = null;
   function readHash() {
     var params = new URLSearchParams(location.hash.slice(1));
     var ui = UI_ALIAS[params.get('ui')] || params.get('ui');
@@ -55,7 +66,13 @@
     });
     selects.ui.setValue(state.ui);
     selects.flow.setValue(state.flow);
-    slotNote.textContent = FLOW[state.flow].note || '';
+    var flow = FLOW[state.flow];
+    screen.setAttribute('data-chrome', flow.chrome === false ? 'off' : 'on');
+    if (shownScreen !== (flow.screen || '')) {
+      shownScreen = flow.screen || '';
+      flowScreen.innerHTML = SCREENS[shownScreen] || '';
+    }
+    slotNote.textContent = flow.note || '';
     writeHash();
     fit();
   }

@@ -1,0 +1,75 @@
+.screen[data-chrome="off"] .status-bar,
+.screen[data-chrome="off"] .home-indicator { display: none; }
+.flow-screen:empty { display: none; }
+.flow-screen { position: absolute; inset: 0; }
+.uxd {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-grouped-primary);
+}
+.uxd-logo { position: relative; z-index: 1; width: 168px; height: 136px; }
+.uxd-mark,
+.uxd-wordmark { position: absolute; display: block; }
+.uxd-mark {
+  left: 0;
+  top: 0;
+  width: 168px;
+  height: 129.719px;
+  background: var(--text-bottom-default);
+  -webkit-mask: url("../assets/uix-team-mark.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/uix-team-mark.svg") center / 100% 100% no-repeat;
+}
+.uxd-wordmark {
+  left: 30px;
+  top: 94px;
+  width: 107.266px;
+  height: 41.9963px;
+  background: var(--text-fresh-default);
+  -webkit-mask: url("../assets/uix-team-wordmark.svg") center / 100% 100% no-repeat;
+  mask: url("../assets/uix-team-wordmark.svg") center / 100% 100% no-repeat;
+}
+.uxd-track {
+  --uxd-cycle: 10s;
+  position: absolute;
+  left: 50%;
+  top: -160px;
+  width: 320px;
+  height: 320px;
+  margin-left: -160px;
+  animation: uxd-move var(--uxd-cycle) ease-in-out infinite;
+}
+.uxd-glow {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--vibe-fresh);
+  filter: blur(135px);
+  animation: uxd-pulse var(--uxd-cycle) ease-in-out infinite;
+}
+@keyframes uxd-move {
+  0%   { top: -160px; }
+  40%  { top: calc(100% - 160px); }
+  80%  { top: -160px; }
+  100% { top: -160px; }
+}
+@keyframes uxd-pulse {
+  0%      { transform: scale(1); background: var(--vibe-fresh); }
+  20%     { transform: scale(0); background: var(--vibe-fresh); }
+  20.01%  { transform: scale(0); background: var(--vibe-flamingo); }
+  40%     { transform: scale(1); background: var(--vibe-flamingo); }
+  60%     { transform: scale(0); background: var(--vibe-flamingo); }
+  60.01%  { transform: scale(0); background: var(--brand-primary); }
+  80%     { transform: scale(1); background: var(--brand-primary); }
+  90%     { transform: scale(0); background: var(--brand-primary); }
+  90.01%  { transform: scale(0); background: var(--vibe-fresh); }
+  100%    { transform: scale(1); background: var(--vibe-fresh); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .uxd-track,
+  .uxd-glow { animation: none; }
+}
