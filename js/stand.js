@@ -27,13 +27,76 @@
   }
   var SCREENS = {
     'uix-default':
-      '<div class="uxd">' +
+      '<div class="uxd" role="img" aria-label="{UIX} team">' +
         glowLayer('uxd-trail uxd-trail-2') + glowLayer('uxd-trail uxd-trail-1') + glowLayer('') +
-        '<div class="uxd-logo" role="img" aria-label="{UIX} team">' +
+        '<div class="uxd-logo" aria-hidden="true">' +
           '<span class="uxd-mark"></span><span class="uxd-wordmark"></span>' +
         '</div>' +
       '</div>'
   };
+  var LOTTIE_SIZE = { app: 'mobile', mobile: 'mobile', tablet: 'tablet', desktop: 'desktop' };
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var shown = null, pending = null;   // { anim, src, box }
+  function kill(p) {
+    if (!p) return;
+    p.anim.destroy();
+    if (p.box) p.box.remove();
+  }
+  function dropLottie() {
+    kill(pending);
+    kill(shown);
+    pending = shown = null;
+  }
+  function currentFrame(host) {
+    if (shown) return shown.anim.currentFrame;
+    var track = host.querySelector('.uxd-track:not(.uxd-trail)');
+    var css = track && track.getAnimations ? track.getAnimations()[0] : null;
+    return css && css.currentTime ? (css.currentTime % 18000) / 1000 * 30 : 0;
+  }
+  var files = {};
+  function loadFile(src) {
+    if (!files[src]) {
+      files[src] = fetch(src).then(function (r) {
+        if (!r.ok) throw new Error(src + ': ' + r.status);
+        return r.text();
+      });
+      files[src].catch(function () { delete files[src]; });
+    }
+    return files[src];
+  }
+  function syncLottie() {
+    var host = flowScreen.querySelector('.uxd');
+    if (!host || !window.lottie) { dropLottie(); return; }
+    var src = 'lottie/uix-default-' + LOTTIE_SIZE[state.size] + '-' + UI[state.ui].scheme + '.json';
+    if (pending && pending.src === src) return;
+    kill(pending);
+    pending = null;
+    if (shown && shown.src === src) return;
+    var p = { src: src, box: null, anim: { destroy: function () {} } };
+    pending = p;
+    loadFile(src).then(function (text) {
+      if (pending !== p) return;
+      p.box = document.createElement('div');
+      p.box.className = 'uxd-lottie';
+      p.box.setAttribute('aria-hidden', 'true');
+      host.appendChild(p.box);
+      p.anim = lottie.loadAnimation({
+        container: p.box, renderer: 'svg', loop: true, autoplay: false, animationData: JSON.parse(text),
+        rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
+      });
+      p.anim.addEventListener('DOMLoaded', function () {
+        if (pending !== p) return;
+        reduceMotion.matches ? p.anim.goToAndStop(0, true) : p.anim.goToAndPlay(currentFrame(host), true);
+        kill(shown);
+        shown = p;
+        pending = null;
+        host.setAttribute('data-player', 'lottie');
+      });
+    }, function () {
+      if (pending === p) pending = null;
+      if (!shown) host.removeAttribute('data-player');
+    });
+  }
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
   var state = { ui: 'light', size: 'app', flow: 'default' };
@@ -74,8 +137,10 @@
     screen.setAttribute('data-chrome', flow.chrome === false ? 'off' : 'on');
     if (shownScreen !== (flow.screen || '')) {
       shownScreen = flow.screen || '';
+      dropLottie();
       flowScreen.innerHTML = SCREENS[shownScreen] || '';
     }
+    syncLottie();
     slotNote.textContent = flow.note || '';
     writeHash();
     fit();
