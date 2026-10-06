@@ -19,7 +19,7 @@
   var FLOW_GROUPS = [
     { items: {
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
-      'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg' },
+      'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg', screen: 'tabbar', chrome: 'overlay' },
       'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg' }
     } }
   ];
@@ -99,9 +99,10 @@
       if (!shown) host.removeAttribute('data-player');
     });
   }
+  if (window.UXTabBar) SCREENS.tabbar = window.UXTabBar;
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default' };
+  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '' };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -116,6 +117,7 @@
     if (STYLE[params.get('style')]) state.style = params.get('style');
     if (SIZE[params.get('size')]) state.size = params.get('size');
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
+    state.screen = params.get('screen') || '';
   }
   function writeHash() {
     var params = new URLSearchParams();
@@ -123,6 +125,7 @@
     params.set('style', state.style);
     params.set('size', state.size);
     params.set('flow', state.flow);
+    if (state.screen && typeof SCREENS[FLOW[state.flow].screen] === 'object') params.set('screen', state.screen);
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
@@ -139,11 +142,27 @@
     selects.style.setValue(state.style);
     selects.flow.setValue(state.flow);
     var flow = FLOW[state.flow];
-    screen.setAttribute('data-chrome', flow.chrome === false ? 'off' : 'on');
+    screen.setAttribute('data-chrome', flow.chrome === false ? 'off' : flow.chrome || 'on');
+    var shown = SCREENS[shownScreen];
+    if (shownScreen === (flow.screen || '') && shown && typeof shown === 'object' &&
+        state.screen && state.screen !== shown.current()) {
+      shownScreen = null;
+    }
     if (shownScreen !== (flow.screen || '')) {
+      var prev = SCREENS[shownScreen];
+      if (prev && typeof prev === 'object') prev.unmount();
       shownScreen = flow.screen || '';
       dropLottie();
-      flowScreen.innerHTML = SCREENS[shownScreen] || '';
+      var next = SCREENS[shownScreen];
+      if (next && typeof next === 'object') {
+        flowScreen.innerHTML = '';
+        next.mount(flowScreen, {
+          screen: state.screen,
+          onScreen: function (id) { state.screen = id; writeHash(); }
+        });
+      } else {
+        flowScreen.innerHTML = next || '';
+      }
     }
     syncLottie();
     slotNote.textContent = flow.note || '';
@@ -239,7 +258,11 @@
   var selects = {
     ui: makeSelect(document.getElementById('uiMode'), [{ items: UI }], function (k) { state.ui = k; apply(); }),
     style: makeSelect(document.getElementById('style'), [{ items: STYLE }], function (k) { state.style = k; apply(); }),
-    flow: makeSelect(document.getElementById('uxFlow'), FLOW_GROUPS, function (k) { state.flow = k; apply(); })
+    flow: makeSelect(document.getElementById('uxFlow'), FLOW_GROUPS, function (k) {
+      if (k !== state.flow) state.screen = '';
+      state.flow = k;
+      apply();
+    })
   };
   document.querySelectorAll('[data-size-btn]').forEach(function (btn) {
     btn.addEventListener('click', function () {
