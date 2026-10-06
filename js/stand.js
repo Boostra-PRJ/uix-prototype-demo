@@ -20,7 +20,7 @@
     { items: {
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
       'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg', screen: 'tabbar', chrome: 'overlay' },
-      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg' }
+      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay' }
     } }
   ];
   function glowLayer(cls) {
@@ -100,9 +100,10 @@
     });
   }
   if (window.UXTabBar) SCREENS.tabbar = window.UXTabBar;
+  if (window.UXFirstFree) SCREENS['first-free'] = window.UXFirstFree;
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '' };
+  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '', promo: '' };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -118,6 +119,7 @@
     if (SIZE[params.get('size')]) state.size = params.get('size');
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
     state.screen = params.get('screen') || '';
+    state.promo = params.get('promo') || '';
   }
   function writeHash() {
     var params = new URLSearchParams();
@@ -126,6 +128,7 @@
     params.set('size', state.size);
     params.set('flow', state.flow);
     if (state.screen && typeof SCREENS[FLOW[state.flow].screen] === 'object') params.set('screen', state.screen);
+    if (state.promo && FLOW[state.flow].screen === 'first-free') params.set('promo', state.promo);
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
@@ -158,7 +161,9 @@
         flowScreen.innerHTML = '';
         next.mount(flowScreen, {
           screen: state.screen,
-          onScreen: function (id) { state.screen = id; writeHash(); }
+          promo: state.promo,
+          onScreen: function (id) { state.screen = id; writeHash(); },
+          onPromo: function (p) { state.promo = p; writeHash(); }
         });
       } else {
         flowScreen.innerHTML = next || '';
@@ -259,7 +264,7 @@
     ui: makeSelect(document.getElementById('uiMode'), [{ items: UI }], function (k) { state.ui = k; apply(); }),
     style: makeSelect(document.getElementById('style'), [{ items: STYLE }], function (k) { state.style = k; apply(); }),
     flow: makeSelect(document.getElementById('uxFlow'), FLOW_GROUPS, function (k) {
-      if (k !== state.flow) state.screen = '';
+      if (k !== state.flow) { state.screen = ''; state.promo = ''; }
       state.flow = k;
       apply();
     })

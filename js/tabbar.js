@@ -176,6 +176,11 @@ window.UXTabBar = (function () {
       env.onScreen(screenId());
     },
     current: function () { return s ? screenId() : ''; },
+    takeOffer: function () {
+      if (!s) return;
+      if (s.view === 'main') scroller.scrollTo({ top: AUTH_AT, behavior: 'smooth' });
+      else if (s.view === 'default' && s.tab !== 'loan') go({ view: 'default', tab: 'loan', preset: 0 });
+    },
     unmount: function () {
       if (!root) return;
       root.removeEventListener('click', onClick);
