@@ -36,8 +36,7 @@
   };
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var FX = { stretch: 1, trail: 1, logo: 1 };
-  var state = { ui: 'light', size: 'app', flow: 'default', fx: [] };
+  var state = { ui: 'light', size: 'app', flow: 'default' };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -51,14 +50,12 @@
     if (UI[ui]) state.ui = ui;
     if (SIZE[params.get('size')]) state.size = params.get('size');
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
-    state.fx = (params.get('fx') || '').split(',').filter(function (k) { return FX[k]; });
   }
   function writeHash() {
     var params = new URLSearchParams();
     params.set('ui', state.ui);
     params.set('size', state.size);
     params.set('flow', state.flow);
-    if (state.fx.length) params.set('fx', state.fx.join(','));
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
@@ -68,7 +65,6 @@
     screen.setAttribute('data-responsive', size.responsive);
     screen.setAttribute('data-platform', size.platform);
     screen.setAttribute('data-size', state.size);
-    screen.setAttribute('data-fx', state.fx.join(' '));
     document.querySelectorAll('[data-size-btn]').forEach(function (btn) {
       btn.setAttribute('aria-pressed', String(btn.getAttribute('data-size-btn') === state.size));
     });
