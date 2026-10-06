@@ -3,10 +3,13 @@
   var UI = {
     light:                { label: 'Light',              icon: 'assets/mode-light.svg',              scheme: 'light',              type: 'main' },
     dark:                 { label: 'Dark',               icon: 'assets/mode-dark.svg',               scheme: 'dark',               type: 'main' },
-    'availability-black': { label: 'Availability-Black', icon: 'assets/mode-availability-black.svg', scheme: 'availability-black', type: 'main' },
-    'availability-blue':  { label: 'Availability-Blue',  icon: 'assets/mode-availability-blue.svg',  scheme: 'availability-blue',  type: 'availability' }
+    'availability-black': { label: 'AV-1',               icon: 'assets/mode-availability-black.svg', scheme: 'availability-black', type: 'main' },
+    'availability-blue':  { label: 'AV-2',               icon: 'assets/mode-availability-blue.svg',  scheme: 'availability-blue',  type: 'availability' }
   };
   var UI_ALIAS = { contrast: 'availability-black', access: 'availability-blue' };
+  var STYLE = {
+    boostra: { label: 'Boostra' }
+  };
   var SIZE = {
     app:     { label: 'App',     responsive: 'mobile',  platform: 'app', w: 375,  h: 800 },
     mobile:  { label: 'Mobile',  responsive: 'mobile',  platform: 'web', w: 375,  h: 800 },
@@ -16,9 +19,8 @@
   var FLOW_GROUPS = [
     { items: {
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
-      'flow-1':  { label: 'Flow 1',  icon: 'assets/flow-1.svg' },
-      'flow-2':  { label: 'Flow 2',  icon: 'assets/flow-2.svg' },
-      'flow-3':  { label: 'Flow 3',  icon: 'assets/flow-3.svg' }
+      'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg' },
+      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg' }
     } }
   ];
   function glowLayer(cls) {
@@ -99,7 +101,7 @@
   }
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var state = { ui: 'light', size: 'app', flow: 'default' };
+  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default' };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -111,12 +113,14 @@
     var params = new URLSearchParams(location.hash.slice(1));
     var ui = UI_ALIAS[params.get('ui')] || params.get('ui');
     if (UI[ui]) state.ui = ui;
+    if (STYLE[params.get('style')]) state.style = params.get('style');
     if (SIZE[params.get('size')]) state.size = params.get('size');
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
   }
   function writeHash() {
     var params = new URLSearchParams();
     params.set('ui', state.ui);
+    params.set('style', state.style);
     params.set('size', state.size);
     params.set('flow', state.flow);
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
@@ -132,6 +136,7 @@
       btn.setAttribute('aria-pressed', String(btn.getAttribute('data-size-btn') === state.size));
     });
     selects.ui.setValue(state.ui);
+    selects.style.setValue(state.style);
     selects.flow.setValue(state.flow);
     var flow = FLOW[state.flow];
     screen.setAttribute('data-chrome', flow.chrome === false ? 'off' : 'on');
@@ -233,6 +238,7 @@
   }
   var selects = {
     ui: makeSelect(document.getElementById('uiMode'), [{ items: UI }], function (k) { state.ui = k; apply(); }),
+    style: makeSelect(document.getElementById('style'), [{ items: STYLE }], function (k) { state.style = k; apply(); }),
     flow: makeSelect(document.getElementById('uxFlow'), FLOW_GROUPS, function (k) { state.flow = k; apply(); })
   };
   document.querySelectorAll('[data-size-btn]').forEach(function (btn) {

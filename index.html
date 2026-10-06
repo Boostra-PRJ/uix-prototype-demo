@@ -34,18 +34,33 @@
       </div>
     </main>
     <footer class="controls">
-      <div class="select" id="uiMode">
-        <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="uiMode-list" aria-labelledby="uiMode-label uiMode-value">
-          <span class="select-text">
-            <span class="select-label" id="uiMode-label">UI Mode</span>
-            <span class="select-value t-note" id="uiMode-value"></span>
-          </span>
-          <span class="select-chevron" aria-hidden="true">
-            <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
-            <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
-          </span>
-        </button>
-        <ul class="select-list" id="uiMode-list" role="listbox" aria-labelledby="uiMode-label"></ul>
+      <div class="ui-group">
+        <div class="select" id="uiMode">
+          <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="uiMode-list" aria-labelledby="uiMode-label uiMode-value">
+            <span class="select-text">
+              <span class="select-label" id="uiMode-label">UI Mode</span>
+              <span class="select-value t-note" id="uiMode-value"></span>
+            </span>
+            <span class="select-chevron" aria-hidden="true">
+              <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
+              <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
+            </span>
+          </button>
+          <ul class="select-list" id="uiMode-list" role="listbox" aria-labelledby="uiMode-label"></ul>
+        </div>
+        <div class="select" id="style">
+          <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="style-list" aria-labelledby="style-label style-value">
+            <span class="select-text">
+              <span class="select-label" id="style-label">Style</span>
+              <span class="select-value t-note" id="style-value"></span>
+            </span>
+            <span class="select-chevron" aria-hidden="true">
+              <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
+              <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
+            </span>
+          </button>
+          <ul class="select-list" id="style-list" role="listbox" aria-labelledby="style-label"></ul>
+        </div>
       </div>
       <fieldset class="sizes">
         <legend class="visually-hidden">Размер экрана</legend>
@@ -74,18 +89,20 @@
           <span class="t-caption" aria-hidden="true">Desktop</span>
         </div>
       </fieldset>
-      <div class="select" id="uxFlow">
-        <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="uxFlow-list" aria-labelledby="uxFlow-label uxFlow-value">
-          <span class="select-text">
-            <span class="select-label" id="uxFlow-label">UX Flow</span>
-            <span class="select-value t-note" id="uxFlow-value"></span>
-          </span>
-          <span class="select-chevron" aria-hidden="true">
-            <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
-            <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
-          </span>
-        </button>
-        <ul class="select-list" id="uxFlow-list" role="listbox" aria-labelledby="uxFlow-label"></ul>
+      <div class="ux-group">
+        <div class="select" id="uxFlow">
+          <button class="select-field" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="uxFlow-list" aria-labelledby="uxFlow-label uxFlow-value">
+            <span class="select-text">
+              <span class="select-label" id="uxFlow-label">UX Flow</span>
+              <span class="select-value t-note" id="uxFlow-value"></span>
+            </span>
+            <span class="select-chevron" aria-hidden="true">
+              <img class="chev-down" src="assets/chevron-down.svg" width="20" height="20" alt="">
+              <img class="chev-up" src="assets/chevron-up.svg" width="20" height="20" alt="">
+            </span>
+          </button>
+          <ul class="select-list" id="uxFlow-list" role="listbox" aria-labelledby="uxFlow-label"></ul>
+        </div>
       </div>
     </footer>
   </div>
