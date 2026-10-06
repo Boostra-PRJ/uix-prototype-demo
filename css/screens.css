@@ -33,7 +33,7 @@
   mask: url("../assets/uix-team-wordmark.svg") center / 100% 100% no-repeat;
 }
 .uxd-track {
-  --uxd-cycle: 10s;
+  --uxd-cycle: 18s;
   position: absolute;
   left: 50%;
   top: -160px;
@@ -52,22 +52,25 @@
   animation: uxd-pulse var(--uxd-cycle) ease-in-out infinite;
 }
 @keyframes uxd-move {
-  0%   { top: -160px; }
-  40%  { top: calc(100% - 160px); }
-  80%  { top: -160px; }
-  100% { top: -160px; }
+  0%       { top: -160px; }
+  16.667%  { top: calc(100% - 160px); }
+  33.333%  { top: -160px; }
+  50%      { top: calc(100% - 160px); }
+  66.667%  { top: -160px; }
+  83.333%  { top: calc(100% - 160px); }
+  100%     { top: -160px; }
 }
 @keyframes uxd-pulse {
-  0%      { transform: scale(1); background: var(--vibe-fresh); }
-  20%     { transform: scale(0); background: var(--vibe-fresh); }
-  20.01%  { transform: scale(0); background: var(--vibe-flamingo); }
-  40%     { transform: scale(1); background: var(--vibe-flamingo); }
-  60%     { transform: scale(0); background: var(--vibe-flamingo); }
-  60.01%  { transform: scale(0); background: var(--brand-primary); }
-  80%     { transform: scale(1); background: var(--brand-primary); }
-  90%     { transform: scale(0); background: var(--brand-primary); }
-  90.01%  { transform: scale(0); background: var(--vibe-fresh); }
-  100%    { transform: scale(1); background: var(--vibe-fresh); }
+  0%       { transform: scale(1); background: var(--vibe-fresh); }
+  16.667%  { transform: scale(0); background: var(--vibe-fresh); }
+  16.677%  { transform: scale(0); background: var(--vibe-flamingo); }
+  33.333%  { transform: scale(1); background: var(--vibe-flamingo); }
+  50%      { transform: scale(0); background: var(--vibe-flamingo); }
+  50.01%   { transform: scale(0); background: var(--brand-primary); }
+  66.667%  { transform: scale(1); background: var(--brand-primary); }
+  83.333%  { transform: scale(0); background: var(--brand-primary); }
+  83.343%  { transform: scale(0); background: var(--vibe-fresh); }
+  100%     { transform: scale(1); background: var(--vibe-fresh); }
 }
 @media (prefers-reduced-motion: reduce) {
   .uxd-track,
