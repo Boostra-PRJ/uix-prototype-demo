@@ -20,7 +20,8 @@
     { items: {
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
       'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg', screen: 'tabbar', chrome: 'overlay' },
-      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay' }
+      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay' },
+      'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet' }
     } }
   ];
   function glowLayer(cls) {
@@ -100,7 +101,7 @@
     });
   }
   if (window.UXTabBar) SCREENS.tabbar = window.UXTabBar;
-  if (window.UXFirstFree) SCREENS['first-free'] = window.UXFirstFree;
+  if (window.UXFirstFree) SCREENS['first-free'] = SCREENS['first-free-sheet'] = window.UXFirstFree;
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
   var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '', promo: '' };
@@ -128,7 +129,7 @@
     params.set('size', state.size);
     params.set('flow', state.flow);
     if (state.screen && typeof SCREENS[FLOW[state.flow].screen] === 'object') params.set('screen', state.screen);
-    if (state.promo && FLOW[state.flow].screen === 'first-free') params.set('promo', state.promo);
+    if (state.promo && /^first-free/.test(FLOW[state.flow].screen || '')) params.set('promo', state.promo);
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
@@ -148,7 +149,8 @@
     screen.setAttribute('data-chrome', flow.chrome === false ? 'off' : flow.chrome || 'on');
     var shown = SCREENS[shownScreen];
     if (shownScreen === (flow.screen || '') && shown && typeof shown === 'object' &&
-        state.screen && state.screen !== shown.current()) {
+        ((state.screen && state.screen !== shown.current()) ||
+         (state.promo && shown.currentPromo && state.promo !== shown.currentPromo()))) {
       shownScreen = null;
     }
     if (shownScreen !== (flow.screen || '')) {
@@ -162,6 +164,7 @@
         next.mount(flowScreen, {
           screen: state.screen,
           promo: state.promo,
+          variant: flow.variant,
           onScreen: function (id) { state.screen = id; writeHash(); },
           onPromo: function (p) { state.promo = p; writeHash(); }
         });

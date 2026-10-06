@@ -26,13 +26,17 @@ window.UXFirstFree = (function () {
   var TAKE = { '1f': 'Забрать', '2w': 'Забрать 30 000 ₽' };
   var deadline = 0, ticker = null;
   var host = null, env = null, promo = '1f', layer = null, watcher = null;
+  var variant = 'above', modal = null, card = null, resizer = null;
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function tick() {
     var left = Math.max(0, Math.floor((deadline - Date.now()) / 1000));
     var h = pad(Math.floor(left / 3600)), m = pad(Math.floor(left / 60) % 60), s = pad(left % 60);
     if (!layer) return;
-    layer.querySelectorAll('[data-ff-time="short"]').forEach(function (el) { el.textContent = h + ':' + m; });
-    layer.querySelectorAll('[data-ff-time="long"]').forEach(function (el) { el.textContent = h + ':' + m + ':' + s; });
+    [layer, modal].forEach(function (box) {
+      if (!box) return;
+      box.querySelectorAll('[data-ff-time="short"]').forEach(function (el) { el.textContent = h + ':' + m; });
+      box.querySelectorAll('[data-ff-time="long"]').forEach(function (el) { el.textContent = h + ':' + m + ':' + s; });
+    });
   }
   function cardHTML(kind) {
     return CARDS[kind] +
@@ -47,7 +51,7 @@ window.UXFirstFree = (function () {
     layer.className = 'ff-layer';
     layer.innerHTML =
       '<div class="ff-slot">' +
-        '<section class="ff-card" aria-labelledby="ff-title"></section>' +
+        '<section class="ff-card" aria-labelledby="ff-title" tabindex="-1"></section>' +
         '<div class="ff-mini">' +
           '<button class="ff-mini-body" type="button" data-ff="open">' +
             '<span class="ff-mini-text"><span class="ff-mini-title">Заём</span><span class="ff-mini-sub">бесплатно</span></span>' +
@@ -58,16 +62,33 @@ window.UXFirstFree = (function () {
         '</div>' +
       '</div>';
     layer.addEventListener('click', onClick);
+    card = layer.querySelector('.ff-card');
+    if (variant === 'sheet') {
+      modal = document.createElement('div');
+      modal.className = 'ff-modal';
+      modal.innerHTML = '<div class="ff-scrim" data-ff="close" aria-hidden="true"></div>' +
+        '<div class="ff-sheet" role="dialog" aria-modal="true" aria-labelledby="ff-title"></div>';
+      modal.querySelector('.ff-sheet').appendChild(card);
+      modal.addEventListener('click', onClick);
+      document.addEventListener('keydown', onKey);
+    }
+  }
+  function onKey(e) {
+    if (e.key === 'Escape' && (promo === '1f' || promo === '2w')) setPromo(ON_CLOSE[promo]);
   }
   function setPromo(next, silent) {
     var kind = next === '2w' || next === 'mini-2w' ? '2w' : '1f';
-    var card = layer.querySelector('.ff-card');
     if (card.getAttribute('data-kind') !== kind) {
       card.setAttribute('data-kind', kind);
       card.innerHTML = cardHTML(kind);
     }
+    var opened = (next === '1f' || next === '2w') && promo !== next;
     promo = next;
     layer.setAttribute('data-promo', next);
+    if (modal) {
+      modal.setAttribute('data-promo', next);
+      if (opened && !silent) requestAnimationFrame(function () { if (card) card.focus({ preventScroll: true }); });
+    }
     layer.querySelector('.ff-mini-body').setAttribute('aria-label',
       (kind === '2w' ? '2 недели бесплатно' : 'Первый заём бесплатно') + ' — открыть');
     tick();
@@ -90,6 +111,14 @@ window.UXFirstFree = (function () {
     if (layer.parentNode !== bottom) bottom.insertBefore(layer, bottom.firstChild);
     layer.hidden = /^login/.test(screenId || '');
     var tb = host.querySelector('.tb');
+    if (modal) {
+      if (modal.parentNode !== tb) tb.appendChild(modal);
+      modal.hidden = layer.hidden;
+      sheetBottom();
+      if (resizer) resizer.disconnect();
+      resizer = new ResizeObserver(sheetBottom);
+      resizer.observe(bottom);
+    }
     if (watcher) watcher.disconnect();
     watcher = new MutationObserver(lift);
     watcher.observe(tb, { attributes: true, attributeFilter: ['data-auth', 'data-window'] });
@@ -107,10 +136,19 @@ window.UXFirstFree = (function () {
     }
     layer.style.setProperty('--ff-lift', over + 'px');
   }
+  function sheetBottom() {
+    var tb = host.querySelector('.tb');
+    var pill = host.querySelector('.tb-pill');
+    if (!tb || !pill) return;
+    var a = tb.getBoundingClientRect(), b = pill.getBoundingClientRect();
+    var k = a.height / tb.offsetHeight || 1;
+    modal.style.setProperty('--ff-sheet-bottom', Math.round((a.bottom - b.bottom) / k) + 'px');
+  }
   return {
     mount: function (el, e) {
       host = el;
       env = e;
+      variant = e.variant === 'sheet' ? 'sheet' : 'above';
       if (!deadline) deadline = Date.now() + 24 * 3600 * 1000;
       build();
       setPromo(STATES.indexOf(e.promo) >= 0 ? e.promo : '1f', true);
@@ -122,13 +160,19 @@ window.UXFirstFree = (function () {
       ticker = setInterval(tick, 1000);
     },
     current: function () { return window.UXTabBar.current(); },
+    currentPromo: function () { return host ? promo : ''; },
     unmount: function () {
       if (!host) return;
       clearInterval(ticker);
       if (watcher) watcher.disconnect();
       layer.removeEventListener('click', onClick);
+      if (modal) {
+        modal.removeEventListener('click', onClick);
+        document.removeEventListener('keydown', onKey);
+      }
+      if (resizer) resizer.disconnect();
       window.UXTabBar.unmount();
-      host = env = layer = watcher = ticker = null;
+      host = env = layer = watcher = ticker = modal = card = resizer = null;
     }
   };
 })();
