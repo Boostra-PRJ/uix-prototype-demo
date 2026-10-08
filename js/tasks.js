@@ -95,6 +95,15 @@ window.UXTasks = (function () {
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
   }
+  var URL_RE = /\b(?:https?:\/\/)?(?:[a-z0-9-]+\.)+(?:ru|com|io|net|org|app|dev)(?![a-z0-9-])(?:\/[^\s<]*)?/gi;
+  function linkify(s) {
+    return esc(s).replace(URL_RE, function (m) {
+      var tail = (m.match(/[.,;:!?)»]+$/) || [''])[0];
+      var url = m.slice(0, m.length - tail.length);
+      var href = /^https?:\/\//i.test(url) ? url : 'https://' + url;
+      return '<a class="tt-link" href="' + href + '" target="_blank" rel="noopener noreferrer">' + url + '</a>' + tail;
+    });
+  }
   function todayISO() {
     var d = new Date();
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
@@ -337,7 +346,7 @@ window.UXTasks = (function () {
         '<div class="tt-row-main">' +
           '<button class="tt-hidden tt-toggle" type="button" data-tt="toggle" aria-expanded="false" aria-describedby="tt-move-hint">' + esc(t.title) + ' — раскрыть описание</button>' +
           '<p class="tt-row-title" aria-hidden="true">' + esc(t.title) + '</p>' +
-          '<p class="tt-row-desc t-caption">' + esc(t.description || '') + '</p>' +
+          '<p class="tt-row-desc t-caption">' + linkify(t.description || '') + '</p>' +
         '</div>' +
         '<button class="tt-edit" type="button" data-tt="edit" aria-label="Редактировать задачу «' + esc(t.title) + '»">' +
           '<span class="tt-ico tt-ico-edit" aria-hidden="true"></span></button>' +
@@ -446,7 +455,7 @@ window.UXTasks = (function () {
   var drag = null, justDropped = false;
   function onPointerDown(e) {
     var row = e.target.closest('.tt-row');
-    if (!row || e.button > 0 || e.target.closest('.tt-edit') || root.querySelector('.tt-form:not([hidden])')) return;
+    if (!row || e.button > 0 || e.target.closest('.tt-edit, .tt-link') || root.querySelector('.tt-form:not([hidden])')) return;
     drag = { row: row, x: e.clientX, y: e.clientY, id: e.pointerId, started: false, touch: e.pointerType !== 'mouse' };
     if (drag.touch) drag.timer = setTimeout(function () { if (drag && !drag.started) startDrag(drag.x, drag.y); }, 300);
     window.addEventListener('pointermove', onPointerMove);
@@ -629,6 +638,7 @@ window.UXTasks = (function () {
   }
   function onClick(e) {
     if (justDropped) return;
+    if (e.target.closest('.tt-link')) return; // ссылка открывается сама, строку не раскрывает
     var el = e.target.closest('[data-tt], .tt-person, .tt-chip, .tt-seg [role="radio"], .tt-catch, .tt-row');
     if (!el) return;
     if (el.classList.contains('tt-catch')) { closeForm(); return; }

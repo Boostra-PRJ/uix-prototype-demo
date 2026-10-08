@@ -214,6 +214,10 @@
   letter-spacing: var(--body-medium-letter-spacing);
 }
 .tt-row-desc { color: var(--text-bottom-secondary); }
+.tt-link { color: var(--system-link-default); text-decoration: none; }
+.tt-link:hover { color: var(--system-link-hover); text-decoration: underline; }
+.tt-link:active { color: var(--system-link-press); }
+.tt-link:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 1px; border-radius: 2px; }
 .tt-row[aria-expanded="true"] .tt-row-desc { white-space: normal; }
 .tt-people { display: flex; flex-shrink: 0; align-items: center; width: 52px; overflow: hidden; }
 .tt-people img {
