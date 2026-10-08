@@ -135,7 +135,7 @@ window.UXTasks = (function () {
       '<p class="tt-hidden tt-live" aria-live="polite"></p>' +
       '<div class="tt-login" hidden>' +
         '<div class="tt-otp" data-state="idle">' +
-          '<div class="tt-otp-title"><h1>Вход в таск-трекер</h1><p class="t-note">Введите пароль — его даёт Стас</p></div>' +
+          '<div class="tt-otp-title"><h1>UIX Task tracker</h1><p class="t-note">Введите пароль</p></div>' +
           '<div class="tt-otp-body">' +
             '<div class="tt-cells" role="group" aria-label="Пароль, шесть цифр">' +
               '<div class="tt-cells-group">' + cells(0) + '</div><div class="tt-cells-group">' + cells(3) + '</div>' +
