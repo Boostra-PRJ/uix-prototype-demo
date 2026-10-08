@@ -159,6 +159,7 @@ window.UXTasks = (function () {
           return '<section class="tt-section" data-status="' + s[0] + '" aria-labelledby="tt-h-' + s[0] + '">' +
             '<div class="tt-section-head"><h2 id="tt-h-' + s[0] + '">' + s[1] + '</h2><span class="tt-badge tt-count" aria-label="задач"></span></div>' +
             '<div class="tt-rows" data-status="' + s[0] + '"></div>' +
+            '<div class="tt-thumb" hidden aria-hidden="true"></div>' +
             (s[0] === 'process' ? '<p class="tt-drop t-note">Перетащите задачу из Бэклога</p>' : '') +
           '</section>';
         }).join('') + '</div>' +
@@ -169,6 +170,9 @@ window.UXTasks = (function () {
     root.addEventListener('click', onClick);
     root.addEventListener('keydown', onKey);
     root.addEventListener('pointerdown', onPointerDown);
+    root.addEventListener('scroll', syncThumbs, true);
+    window.addEventListener('resize', syncThumbs);
+    root.querySelectorAll('.tt-thumb').forEach(function (thumb) { thumb.addEventListener('pointerdown', onThumbDown); });
     var otp = root.querySelector('.tt-otp');
     otp.addEventListener('input', onCellInput);
     otp.addEventListener('keydown', onCellKey);
@@ -351,6 +355,46 @@ window.UXTasks = (function () {
       var t = root.querySelector('.tt-row[data-id="' + focusId + '"] .tt-toggle');
       if (t) t.focus();
     }
+    syncThumbs();
+  }
+  var THUMB_INSET = 4, THUMB_MIN = 24;
+  function thumbGeometry(rows) {
+    var track = rows.clientHeight - 2 * THUMB_INSET;
+    var size = Math.max(THUMB_MIN, Math.round(track * rows.clientHeight / rows.scrollHeight));
+    var range = rows.scrollHeight - rows.clientHeight;
+    return { track: track, size: size, range: range };
+  }
+  function syncThumbs() {
+    if (!root || root.hidden) return;
+    root.querySelectorAll('.tt-section').forEach(function (section) {
+      var rows = section.querySelector('.tt-rows'), thumb = section.querySelector('.tt-thumb');
+      var g = thumbGeometry(rows);
+      thumb.hidden = g.range <= 1;
+      if (thumb.hidden) return;
+      thumb.style.height = g.size + 'px';
+      thumb.style.top = rows.offsetTop + THUMB_INSET + Math.round((g.track - g.size) * rows.scrollTop / g.range) + 'px';
+    });
+  }
+  function onThumbDown(e) {
+    if (e.button > 0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var thumb = e.currentTarget, rows = thumb.parentNode.querySelector('.tt-rows');
+    var g = thumbGeometry(rows), startY = e.clientY, startTop = rows.scrollTop;
+    thumb.setAttribute('data-active', 'true');
+    var move = function (ev) {
+      rows.scrollTop = startTop + (ev.clientY - startY) * g.range / (g.track - g.size);
+      syncThumbs();
+    };
+    var up = function () {
+      thumb.removeAttribute('data-active');
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
   }
   function toggleRow(row) {
     var open = row.getAttribute('aria-expanded') !== 'true';
@@ -358,12 +402,12 @@ window.UXTasks = (function () {
     row.setAttribute('aria-expanded', String(open));
     row.querySelector('.tt-toggle').setAttribute('aria-expanded', String(open));
     var to = row.offsetHeight;
-    if (from === to || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (from === to || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { syncThumbs(); return; }
     row.style.height = from + 'px';
     row.offsetHeight; // зафиксировать стартовую высоту
     row.classList.add('is-animating');
     row.style.height = to + 'px';
-    setTimeout(function () { row.classList.remove('is-animating'); row.style.height = ''; }, 220);
+    setTimeout(function () { row.classList.remove('is-animating'); row.style.height = ''; syncThumbs(); }, 220);
   }
   function moveByKey(id, dir) {
     var order = SECTIONS.reduce(function (acc, s) {
@@ -437,6 +481,7 @@ window.UXTasks = (function () {
     var rows = Array.prototype.slice.call(target.querySelectorAll('.tt-row:not([hidden])'));
     var before = rows.find(function (r) { var b = r.getBoundingClientRect(); return y < b.top + b.height / 2; });
     if (before) target.insertBefore(drag.ph, before); else target.appendChild(drag.ph);
+    syncThumbs();
     var tr = target.getBoundingClientRect();
     if (y < tr.top + 32) target.scrollTop -= 8;
     else if (y > tr.bottom - 32) target.scrollTop += 8;
