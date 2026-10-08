@@ -1,8 +1,13 @@
 window.UXTasks = (function () {
   'use strict';
-  var PASSWORD = '241391';
+  var SNAPSHOT = 'tasks/tasks.enc.json';
   var STORE = 'uix-tasks';
-  var AUTH = 'uix-tasks-auth';
+  var KEY = 'uix-tasks-key';
+  var ERRORS = {
+    wrong: 'Неверный пароль, попробуйте ещё раз',
+    net: 'Нет связи, попробуйте ещё раз',
+    crypto: 'Браузер не поддерживает вход'
+  };
   var TEAM = {
     stas: { name: 'Стас', img: 'assets/tasks/avatar-stas.png' },
     marina: { name: 'Марина', img: 'assets/tasks/avatar-marina.png' },
@@ -19,23 +24,73 @@ window.UXTasks = (function () {
   var editing = null, formOpener = null;
   function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
   function write(key, value) { try { localStorage.setItem(key, value); } catch (e) {  } }
+  function drop(key) { try { localStorage.removeItem(key); } catch (e) {  } }
   function save() { write(STORE, JSON.stringify({ version: version, tasks: tasks })); }
+  function forget() { memKey = null; drop(KEY); drop(STORE); }
+  function fail(code) { var e = new Error(code); e.code = code; return e; }
+  function toBytes(s) {
+    var bin = atob(s), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  function toBase64(bytes) { return btoa(String.fromCharCode.apply(null, bytes)); }
+  var memKey = null;
+  function storedKey() {
+    if (memKey) return memKey;
+    try { var k = toBytes(read(KEY) || ''); return k.length === 64 ? k : null; } catch (e) { return null; }
+  }
+  var snapLoad = null;
+  function snapshot() {
+    if (!snapLoad) {
+      snapLoad = fetch(SNAPSHOT, { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw fail('net'); return r.json(); })
+        .catch(function () { snapLoad = null; throw fail('net'); });
+    }
+    return snapLoad;
+  }
+  function deriveKey(code, snap) {
+    if (!window.crypto || !crypto.subtle) return Promise.reject(fail('crypto'));
+    return crypto.subtle.importKey('raw', new TextEncoder().encode(code), 'PBKDF2', false, ['deriveBits'])
+      .then(function (k) {
+        return crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: toBytes(snap.salt), iterations: snap.iter }, k, 512);
+      })
+      .then(function (bits) { return new Uint8Array(bits); });
+  }
+  function unlock(key, snap) {
+    var subtle = crypto.subtle, iv = toBytes(snap.iv), data = toBytes(snap.data);
+    var signed = new Uint8Array(iv.length + data.length);
+    signed.set(iv);
+    signed.set(data, iv.length);
+    return subtle.importKey('raw', key.slice(32), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify'])
+      .then(function (k) { return subtle.verify('HMAC', k, toBytes(snap.mac), signed); })
+      .then(function (ok) {
+        if (!ok) throw fail('wrong');
+        return subtle.importKey('raw', key.slice(0, 32), 'AES-CBC', false, ['decrypt']);
+      })
+      .then(function (k) { return subtle.decrypt({ name: 'AES-CBC', iv: iv }, k, data); })
+      .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+  }
   function load(done) {
     var saved = null;
     try { saved = JSON.parse(read(STORE)); } catch (e) {  }
-    fetch('tasks/seed.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
-      .then(function (seed) {
-        if (saved && saved.tasks && (saved.version || 0) >= (seed.version || 0)) {
+    var key = storedKey();
+    if (!key) { showLogin(); return; }
+    snapshot().then(function (snap) {
+      unlock(key, snap).then(function (list) {
+        if (saved && saved.tasks && (saved.version || 0) >= (snap.version || 0)) {
           tasks = saved.tasks; version = saved.version || 0;
         } else {
-          tasks = seed.tasks; version = seed.version || 0; save();
+          tasks = list; version = snap.version || 0; save();
         }
         done();
-      })
-      .catch(function () {
-        tasks = saved && saved.tasks ? saved.tasks : []; version = saved ? saved.version || 0 : 0;
-        done();
+      }, function () {
+        forget();
+        showLogin();
       });
+    }, function () {
+      tasks = saved && saved.tasks ? saved.tasks : []; version = saved ? saved.version || 0 : 0;
+      done();
+    });
   }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
@@ -228,17 +283,24 @@ window.UXTasks = (function () {
     checking = true;
     otpState('checking');
     cellsEls().forEach(function (c) { c.readOnly = true; });
-    setTimeout(function () {
-      checking = false;
-      if (code === PASSWORD) {
-        write(AUTH, '1');
-        showList();
-      } else {
-        otpState('error');
-        cellsEls().forEach(function (c) { c.readOnly = false; });
-        cellsEls()[5].focus();
-      }
-    }, 700);
+    var started = Date.now();
+    var finish = function (fn) { setTimeout(function () { checking = false; if (!root.hidden) fn(); }, Math.max(0, 500 - (Date.now() - started))); };
+    snapshot()
+      .then(function (snap) {
+        return deriveKey(code, snap).then(function (key) { return unlock(key, snap).then(function () { return key; }); });
+      })
+      .then(function (key) {
+        memKey = key;
+        write(KEY, toBase64(key));
+        finish(showList);
+      }, function (err) {
+        finish(function () {
+          root.querySelector('.tt-otp-error').textContent = ERRORS[err && err.code] || ERRORS.wrong;
+          otpState('error');
+          cellsEls().forEach(function (c) { c.readOnly = false; });
+          cellsEls()[5].focus();
+        });
+      });
   }
   function showList() {
     root.querySelector('.tt-login').hidden = true;
@@ -552,7 +614,9 @@ window.UXTasks = (function () {
     onClose = closeCb || null;
     opener = from || document.activeElement;
     root.hidden = false;
-    if (read(AUTH) === '1') showList(); else showLogin();
+    drop('uix-tasks-auth'); // флаг входа прошлой версии больше не пускает
+    if (storedKey()) showList();
+    else { snapshot().catch(function () {  }); showLogin(); }
   }
   function close() {
     if (!root || root.hidden) return;
