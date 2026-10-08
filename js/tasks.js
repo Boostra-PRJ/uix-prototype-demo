@@ -176,6 +176,7 @@ window.UXTasks = (function () {
     var form = root.querySelector('.tt-form');
     form.addEventListener('submit', onSubmit);
     form.querySelector('#tt-due').addEventListener('input', onDueInput);
+    form.querySelector('#tt-desc').addEventListener('input', fitDesc);
     form.querySelector('.tt-date-native').addEventListener('change', function (e) {
       form.querySelector('#tt-due').value = isoToRu(e.target.value);
       fieldError('due', false);
@@ -215,7 +216,7 @@ window.UXTasks = (function () {
           '</div>' +
           '<div class="tt-field">' +
             '<span class="tt-label t-note" id="tt-prio-l">Приоритет</span>' +
-            '<div class="tt-seg" role="radiogroup" aria-labelledby="tt-prio-l">' + PRIORITIES.map(function (p) {
+            '<div class="tt-seg" role="radiogroup" aria-labelledby="tt-prio-l" data-size-segmented-control="44">' + PRIORITIES.map(function (p) {
               return '<button type="button" role="radio" data-priority="' + p[0] + '" aria-checked="false">' + p[1] + '</button>';
             }).join('') + '</div>' +
           '</div>' +
@@ -495,9 +496,8 @@ window.UXTasks = (function () {
     var tags = task ? task.tags || [] : [];
     form.querySelectorAll('.tt-chip').forEach(function (c) { c.setAttribute('aria-pressed', String(tags.indexOf(c.getAttribute('data-tag')) >= 0)); });
     ['title', 'people', 'due'].forEach(function (f) { fieldError(f, false); });
-    var sections = root.querySelector('.tt-sections');
-    form.style.setProperty('--tt-form-top', sections.offsetTop + 'px');
     form.hidden = false;
+    fitDesc();
     root.querySelector('.tt-catch').hidden = false;
     form.querySelector('#tt-title').focus();
   }
@@ -506,6 +506,11 @@ window.UXTasks = (function () {
     root.querySelector('.tt-catch').hidden = true;
     if (formOpener && document.body.contains(formOpener)) formOpener.focus();
     editing = formOpener = null;
+  }
+  function fitDesc() {
+    var desc = root.querySelector('#tt-desc');
+    desc.style.height = 'auto';
+    desc.style.height = desc.scrollHeight + 2 + 'px'; // + обводка сверху и снизу
   }
   function setPriority(p) {
     root.querySelectorAll('.tt-seg [role="radio"]').forEach(function (b) {

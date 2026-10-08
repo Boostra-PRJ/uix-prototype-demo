@@ -11,7 +11,7 @@
 .tt[hidden],
 .tt-login[hidden],
 .tt-list[hidden] { display: none; }
-.tt button { font: inherit; color: inherit; }
+:where(.tt) button { font: inherit; color: inherit; }
 .tt-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .tt-login {
   display: flex;
@@ -278,15 +278,16 @@
 .tt-catch[hidden] { display: none; }
 .tt-form {
   position: absolute;
-  top: var(--tt-form-top, 132px);
-  right: max(var(--space-2xl), calc((100% - 1224px) / 2));
+  inset: 0;
   z-index: 6;
   display: flex;
   flex-direction: column;
   gap: var(--space-2xl);
   width: 560px;
   max-width: calc(100% - 2 * var(--space-2xl));
-  max-height: calc(100% - var(--tt-form-top, 132px) - var(--space-2xl));
+  height: fit-content;
+  max-height: calc(100% - 2 * var(--space-2xl));
+  margin: auto;
   padding: var(--space-2xl);
   overflow-y: auto;
   border-radius: var(--radius-4xl);
@@ -326,7 +327,7 @@
   gap: var(--space-md);
   width: 100%;
   min-height: 44px;
-  padding: 10px var(--space-lg);
+  padding: 9px calc(var(--space-lg) - 1px);
   border: 1px solid transparent;
   border-bottom-color: var(--neutral-bottom-alpha-10);
   border-radius: var(--radius-2xl);
@@ -345,7 +346,7 @@
 .tt-input-text { flex: 1 0 0; min-width: 0; padding: 0; border: 0; background: none; color: inherit; font: inherit; }
 .tt-input-text:focus { outline: none; }
 .tt-input-text::placeholder { color: var(--text-bottom-quaternary); opacity: 1; }
-textarea.tt-input { min-height: 68px; resize: none; }
+textarea.tt-input { min-height: 68px; overflow-y: hidden; resize: none; }
 .tt-date-btn { display: flex; padding: 0; border: 0; background: none; color: var(--text-bottom-default); cursor: pointer; }
 .tt-date-native { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .tt-error { margin: 0; color: var(--brand-error); }
