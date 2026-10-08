@@ -4,6 +4,7 @@
 .flow-screen { position: absolute; inset: 0; }
 .uxd {
   --uxd-cycle: 18s;
+  cursor: pointer;
   position: absolute;
   inset: 0;
   display: flex;
@@ -12,6 +13,7 @@
   overflow: hidden;
   background: var(--bg-grouped-primary);
 }
+.uxd:focus-visible { outline: 2px solid var(--brand-secondary-alpha-70); outline-offset: -4px; }
 .uxd-logo { position: relative; z-index: 1; width: 168px; height: 136px; }
 .uxd-mark,
 .uxd-wordmark { position: absolute; display: block; }

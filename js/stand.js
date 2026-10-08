@@ -30,7 +30,7 @@
   }
   var SCREENS = {
     'uix-default':
-      '<div class="uxd" role="img" aria-label="{UIX} team">' +
+      '<div class="uxd" role="button" tabindex="0" aria-label="{UIX} team — открыть таск-трекер">' +
         glowLayer('uxd-trail uxd-trail-2') + glowLayer('uxd-trail uxd-trail-1') + glowLayer('') +
         '<div class="uxd-logo" aria-hidden="true">' +
           '<span class="uxd-mark"></span><span class="uxd-wordmark"></span>' +
@@ -104,7 +104,7 @@
   if (window.UXFirstFree) SCREENS['first-free'] = SCREENS['first-free-sheet'] = window.UXFirstFree;
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
-  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '', promo: '' };
+  var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '', promo: '', tasks: false };
   var screen = document.getElementById('screen');
   var device = document.getElementById('device');
   var stage = document.getElementById('stage');
@@ -121,6 +121,7 @@
     if (FLOW[params.get('flow')]) state.flow = params.get('flow');
     state.screen = params.get('screen') || '';
     state.promo = params.get('promo') || '';
+    state.tasks = params.get('tasks') === '1';
   }
   function writeHash() {
     var params = new URLSearchParams();
@@ -130,6 +131,7 @@
     params.set('flow', state.flow);
     if (state.screen && typeof SCREENS[FLOW[state.flow].screen] === 'object') params.set('screen', state.screen);
     if (state.promo && /^first-free/.test(FLOW[state.flow].screen || '')) params.set('promo', state.promo);
+    if (state.tasks) params.set('tasks', '1');
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
@@ -278,8 +280,25 @@
       apply();
     });
   });
+  function openTasks() {
+    if (!window.UXTasks || window.UXTasks.isOpen()) return;
+    state.tasks = true;
+    writeHash();
+    window.UXTasks.open(function () {
+      state.tasks = false;
+      if (state.flow !== 'default') { state.flow = 'default'; state.screen = ''; state.promo = ''; }
+      apply();
+      var splash = flowScreen.querySelector('.uxd');
+      if (splash) splash.focus();
+    }, flowScreen.querySelector('.uxd'));
+  }
+  flowScreen.addEventListener('click', function (e) { if (e.target.closest('.uxd')) openTasks(); });
+  flowScreen.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('uxd')) { e.preventDefault(); openTasks(); }
+  });
   window.addEventListener('resize', fit);
   window.addEventListener('hashchange', function () { readHash(); apply(); });
   readHash();
   apply();
+  if (state.tasks) openTasks();
 })();
