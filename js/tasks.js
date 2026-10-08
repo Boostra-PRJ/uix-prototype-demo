@@ -19,7 +19,7 @@ window.UXTasks = (function () {
   var PRIORITIES = [['high', 'High'], ['medium', 'Medium'], ['low', 'Low']];
   var MONTHS = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
   var MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-  var SECTIONS = [['process', 'Процесс'], ['backlog', 'Бэклог']];
+  var SECTIONS = [['backlog', 'Бэклог'], ['process', 'Процесс']];
   var root = null, tasks = null, version = 0, onClose = null, opener = null;
   var editing = null, formOpener = null;
   function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
@@ -318,22 +318,30 @@ window.UXTasks = (function () {
     var today = todayISO();
     var people = t.assignees.filter(function (k) { return TEAM[k]; });
     return '<div class="tt-row" data-id="' + esc(t.id) + '" aria-expanded="false">' +
-      '<div class="tt-row-main">' +
-        '<button class="tt-hidden tt-toggle" type="button" data-tt="toggle" aria-expanded="false" aria-describedby="tt-move-hint">' + esc(t.title) + ' — раскрыть описание</button>' +
-        '<p class="tt-row-title" aria-hidden="true">' + esc(t.title) + '</p>' +
-        '<p class="tt-row-desc t-caption">' + esc(t.description || '') + '</p>' +
+      '<div class="tt-row-top">' +
+        '<div class="tt-row-meta">' +
+          '<div class="tt-people" role="img" aria-label="Исполнители: ' + people.map(function (k) { return TEAM[k].name; }).join(', ') + '" data-circle="on">' +
+            people.map(function (k) { return '<img src="' + TEAM[k].img + '" width="20" height="20" alt="">'; }).join('') +
+          '</div>' +
+          '<div class="tt-tags">' + (t.tags || []).map(function (k) {
+            return '<span class="tt-badge tt-tag" data-tag="' + k + '">' + esc(TAG_LABEL[k] || k) + '</span>';
+          }).join('') + '</div>' +
+        '</div>' +
+        '<div class="tt-row-status">' +
+          '<div class="tt-due t-caption" data-overdue="' + (t.due && t.due < today ? 'true' : 'false') + '">' +
+            '<span class="tt-due-ico" aria-hidden="true"></span><span>' + dueText(t.due) + '</span></div>' +
+          '<div class="tt-prio"><span class="tt-badge tt-priority" data-priority="' + t.priority + '">' + t.priority + '</span></div>' +
+        '</div>' +
       '</div>' +
-      '<div class="tt-people" role="img" aria-label="Исполнители: ' + people.map(function (k) { return TEAM[k].name; }).join(', ') + '" data-circle="on">' +
-        people.map(function (k) { return '<img src="' + TEAM[k].img + '" width="40" height="40" alt="">'; }).join('') +
+      '<div class="tt-row-bottom">' +
+        '<div class="tt-row-main">' +
+          '<button class="tt-hidden tt-toggle" type="button" data-tt="toggle" aria-expanded="false" aria-describedby="tt-move-hint">' + esc(t.title) + ' — раскрыть описание</button>' +
+          '<p class="tt-row-title" aria-hidden="true">' + esc(t.title) + '</p>' +
+          '<p class="tt-row-desc t-caption">' + esc(t.description || '') + '</p>' +
+        '</div>' +
+        '<button class="tt-edit" type="button" data-tt="edit" aria-label="Редактировать задачу «' + esc(t.title) + '»">' +
+          '<span class="tt-ico tt-ico-edit" aria-hidden="true"></span></button>' +
       '</div>' +
-      '<div class="tt-tags">' + (t.tags || []).map(function (k) {
-        return '<span class="tt-badge tt-tag" data-tag="' + k + '">' + esc(TAG_LABEL[k] || k) + '</span>';
-      }).join('') + '</div>' +
-      '<div class="tt-due t-caption" data-overdue="' + (t.due && t.due < today ? 'true' : 'false') + '">' +
-        '<span class="tt-due-ico" aria-hidden="true"></span><span>' + dueText(t.due) + '</span></div>' +
-      '<div class="tt-prio"><span class="tt-badge tt-priority" data-priority="' + t.priority + '">' + t.priority + '</span></div>' +
-      '<div class="tt-actions"><button class="tt-edit" type="button" data-tt="edit" aria-label="Редактировать задачу «' + esc(t.title) + '»">' +
-        '<span class="tt-ico tt-ico-edit" aria-hidden="true"></span></button></div>' +
     '</div>';
   }
   function renderRows(focusId) {
@@ -348,7 +356,7 @@ window.UXTasks = (function () {
       var hint = document.createElement('p');
       hint.id = 'tt-move-hint';
       hint.className = 'tt-hidden';
-      hint.textContent = 'Alt и стрелки вверх или вниз — переставить задачу, в том числе между Процессом и Бэклогом';
+      hint.textContent = 'Alt и стрелки вверх или вниз — переставить задачу в блоке; Alt и стрелки влево или вправо — перенести между Бэклогом и Процессом';
       root.appendChild(hint);
     }
     if (focusId) {
@@ -410,25 +418,30 @@ window.UXTasks = (function () {
     setTimeout(function () { row.classList.remove('is-animating'); row.style.height = ''; syncThumbs(); }, 220);
   }
   function moveByKey(id, dir) {
-    var order = SECTIONS.reduce(function (acc, s) {
-      return acc.concat(tasks.filter(function (t) { return t.status === s[0]; }));
-    }, []);
-    var i = order.findIndex(function (t) { return t.id === id; });
-    var task = order[i];
-    var processCount = order.filter(function (t) { return t.status === 'process'; }).length;
-    if (dir < 0) {
-      if (task.status === 'backlog' && i === processCount) task.status = 'process';
-      else if (i > 0) { order.splice(i, 1); order.splice(i - 1, 0, task); }
-      else return;
-    } else {
-      if (task.status === 'process' && i === processCount - 1) task.status = 'backlog';
-      else if (i < order.length - 1) { order.splice(i, 1); order.splice(i + 1, 0, task); }
-      else return;
-    }
-    tasks = order;
+    var task = tasks.find(function (t) { return t.id === id; });
+    var list = tasks.filter(function (t) { return t.status === task.status; });
+    var i = list.indexOf(task);
+    if (i + dir < 0 || i + dir >= list.length) return;
+    var a = tasks.indexOf(task), b = tasks.indexOf(list[i + dir]);
+    tasks[a] = list[i + dir];
+    tasks[b] = task;
     save();
     renderRows(id);
-    announce('«' + task.title + '» — ' + (task.status === 'process' ? 'Процесс' : 'Бэклог'));
+    announce('«' + task.title + '» — место ' + (i + dir + 1) + ' из ' + list.length);
+  }
+  function moveAcross(id, dir) {
+    var task = tasks.find(function (t) { return t.id === id; });
+    var col = SECTIONS.findIndex(function (s) { return s[0] === task.status; }) + dir;
+    if (col < 0 || col >= SECTIONS.length) return;
+    var status = SECTIONS[col][0];
+    tasks.splice(tasks.indexOf(task), 1);
+    var first = tasks.findIndex(function (t) { return t.status === status; });
+    task.status = status;
+    tasks.splice(first < 0 ? tasks.length : first, 0, task);
+    save();
+    renderRows(id);
+    root.querySelector('.tt-rows[data-status="' + status + '"]').scrollTop = 0;
+    announce('«' + task.title + '» — ' + SECTIONS[col][1]);
   }
   var drag = null, justDropped = false;
   function onPointerDown(e) {
@@ -654,9 +667,10 @@ window.UXTasks = (function () {
       e.preventDefault();
       return;
     }
-    if (e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.target.classList.contains('tt-toggle')) {
-      e.preventDefault();
-      moveByKey(e.target.closest('.tt-row').getAttribute('data-id'), e.key === 'ArrowUp' ? -1 : 1);
+    if (e.altKey && e.target.classList.contains('tt-toggle')) {
+      var id = e.target.closest('.tt-row').getAttribute('data-id');
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); moveByKey(id, e.key === 'ArrowUp' ? -1 : 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); moveAcross(id, e.key === 'ArrowLeft' ? -1 : 1); }
     }
   }
   function open(closeCb, from) {
