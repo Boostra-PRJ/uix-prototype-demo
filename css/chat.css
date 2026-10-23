@@ -319,8 +319,7 @@ button.ch-bubble { cursor: pointer; }
   font-size: var(--note-medium-size);
   line-height: var(--note-medium-line-height);
 }
-.btn-semantic { width: 100%; background: var(--semantic-button-fill-default); color: var(--semantic-text-and-icon); }
-.btn-semantic:hover { filter: brightness(0.97); }
+.ch-alert .btn-semantic { width: 100%; }
 .ch-toast {
   position: absolute;
   top: 0;

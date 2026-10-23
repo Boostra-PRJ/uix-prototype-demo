@@ -208,6 +208,16 @@
   background: var(--ghost-secondary-fill-hover-and-press);
   color: var(--ghost-secondary-text-and-icon-hover-and-press);
 }
+.btn-semantic {
+  border-color: var(--semantic-button-border);
+  background: var(--semantic-button-fill-default);
+  color: var(--semantic-text-and-icon);
+}
+.btn-semantic:hover,
+.btn-semantic:active { background: var(--semantic-button-fill-hover-and-press); }
+.btn-semantic[data-ghost="on"] { background: transparent; }
+.btn-semantic[data-ghost="on"]:hover,
+.btn-semantic[data-ghost="on"]:active { background: var(--semantic-button-fill-ghost-hover-and-press); }
 .ico {
   display: block;
   width: 20px;
