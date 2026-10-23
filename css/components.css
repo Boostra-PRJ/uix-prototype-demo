@@ -187,6 +187,8 @@
 }
 .btn[data-size-button="large"] { border-radius: var(--circle-button-radius-large); }
 .btn[data-size-button="xlarge"] { border-radius: var(--circle-button-radius-xl); }
+.btn[data-size-button="small"],
+.btn[data-size-button="medium"] { border-radius: var(--circle-button-radius-m-s); }
 .btn-icon-only { width: var(--size-button-h); padding: 0; }
 .btn > img { display: block; width: 20px; height: 20px; flex-shrink: 0; }
 .btn:focus-visible { outline: 1px solid var(--brand-secondary-alpha-70); outline-offset: 2px; }

@@ -21,7 +21,8 @@
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
       'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg', screen: 'tabbar', chrome: 'overlay' },
       'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay' },
-      'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet' }
+      'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet' },
+      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay' }
     } }
   ];
   function glowLayer(cls) {
@@ -102,6 +103,7 @@
   }
   if (window.UXTabBar) SCREENS.tabbar = window.UXTabBar;
   if (window.UXFirstFree) SCREENS['first-free'] = SCREENS['first-free-sheet'] = window.UXFirstFree;
+  if (window.UXMain) SCREENS.glavnaya = window.UXMain;
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
   var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '', promo: '', tasks: false };
