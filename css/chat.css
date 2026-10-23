@@ -226,6 +226,11 @@ button.ch-bubble { cursor: pointer; }
   opacity: 0.8;
   filter: blur(calc(var(--blur-lg) / 2));
   pointer-events: none;
+  animation: ch-breath 3s ease-in-out infinite;
+}
+@keyframes ch-breath {
+  0%, 100% { opacity: 0.5; transform: scale(0.98, 0.94); }
+  50% { opacity: 0.95; transform: scale(1.02, 1.06); }
 }
 .ch-field {
   position: relative;
@@ -351,6 +356,7 @@ button.ch-bubble { cursor: pointer; }
 .ch-noaccess-text { display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); padding-top: var(--space-lg); text-align: center; }
 .ch-noaccess > .btn { width: 100%; }
 @media (prefers-reduced-motion: reduce) {
+  .ch-glow { animation: none; opacity: 0.8; }
   .ch-dots i { animation: none; }
   .ch-dots i:nth-child(2) { opacity: 0.6; }
   .ch-dots i:nth-child(3) { opacity: 0.3; }

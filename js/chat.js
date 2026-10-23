@@ -22,7 +22,7 @@ window.UXChat = (function () {
   function header(mode) {
     var h = HEAD[mode];
     var left = mode === 'gpt' ? svc('menu-2', 'Меню: история чатов', 'history', 20) : '';
-    var right = mode === 'gpt' ? svc('new-chat', 'Новый чат', 'new', 20) : svc('chevron-down', 'Свернуть', 'close', 20);
+    var right = svc('close', 'Закрыть', 'close', 20);
     return '<div class="ch-head">' + left +
       '<img class="ch-avatar" src="' + A + 'avatar-illustration-40@2x.png" width="40" height="40" alt="">' +
       '<div class="ch-head-text"><p class="ch-name">' + h.name + '<span class="ch-badge" data-type="' + h.badge[0] + '">' + h.badge[1] + '</span></p>' +

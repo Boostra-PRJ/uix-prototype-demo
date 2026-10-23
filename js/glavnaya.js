@@ -96,7 +96,9 @@ window.UXMain = (function () {
           '<button class="btn btn-semantic" type="button" data-size-button="xlarge" data-semantic="attention" data-ghost="on" data-act="care"><span class="gm-ico gm-ico-care" aria-hidden="true"></span>Служба заботы</button>' +
           '<button class="btn btn-semantic" type="button" data-size-button="xlarge" data-semantic="success" data-act="pay">Внести платёж<span class="ico ico-plus" aria-hidden="true"></span></button>' +
         '</div>' +
-        btnNeutral('gm-profile', 'user', s.view === 'default' ? 'Профиль' : 'Войти', ' data-act="profile"') +
+        (s.view === 'default'
+          ? '<button class="gm-profile gm-avatar-btn" type="button" data-act="profile" aria-label="Профиль"><img src="' + A + 'header/bustrik-52@2x.png" width="52" height="52" alt=""></button>'
+          : btnNeutral('gm-profile', 'user', 'Войти', ' data-act="profile"')) +
       '</div>' +
       ('<div class="gm-menu" id="gm-menu">' +
         '<div class="divider"></div>' +
@@ -245,14 +247,18 @@ window.UXMain = (function () {
         return '<div class="gm-foot-col"><p class="gm-row-title">' + g[0] + '</p>' + g[1].map(sub).join('') + '</div>';
       }).join('') + '</nav>' +
       '<div class="gm-foot-divider"></div>' +
-      '<div class="gm-foot-grid gm-foot-bottom">' +
-        '<div class="gm-foot-col gm-foot-legal"><p class="gm-row-title">Юридическая информация</p>' +
-          '<div class="gm-legal t-caption">' + LEGAL.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div></div>' +
-        '<div class="gm-foot-col gm-foot-docs"><p class="gm-row-title">Документы</p>' + DOCS.map(sub).join('') + '</div>' +
-        '<div class="gm-foot-col gm-foot-reg"><p class="gm-row-title">Регулятор</p>' + REGULATOR.map(sub).join('') + '</div>' +
+      '<div class="gm-foot-bottom">' +
+        '<div class="gm-foot-legal">' +
+          '<div class="gm-foot-col"><p class="gm-row-title">Юридическая информация</p>' +
+            '<div class="gm-legal t-caption">' + LEGAL.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div></div>' +
+          '<div class="gm-foot-copy"><p class="gm-copy t-note">© 2026, ООО «Финтех-Маркет»</p>' +
+            '<button class="gm-foot-btn" type="button" data-act="a11y" aria-pressed="' + /^availability/.test(env.ui ? env.ui() : '') + '"><span class="gm-ico gm-ico-eye" aria-hidden="true"></span>Версия для слабовидящих</button></div>' +
+        '</div>' +
+        '<div class="gm-foot-docs">' +
+          '<div class="gm-foot-col gm-foot-xs"><p class="gm-row-title">Документы</p>' + DOCS.map(sub).join('') + '</div>' +
+          '<div class="gm-foot-col gm-foot-xs"><p class="gm-row-title">Регулятор</p>' + REGULATOR.map(sub).join('') + '</div>' +
+        '</div>' +
       '</div>' +
-      '<div class="gm-foot-copy"><p class="gm-copy t-note">© 2026, ООО «Финтех-Маркет»</p>' +
-        '<button class="gm-foot-btn" type="button" data-act="a11y" aria-pressed="' + /^availability/.test(env.ui ? env.ui() : '') + '"><span class="gm-ico gm-ico-eye" aria-hidden="true"></span>Версия для слабовидящих</button></div>' +
     '</footer>';
   }
   function page() {
@@ -333,9 +339,12 @@ window.UXMain = (function () {
   }
   function defaultBar() {
     var open = s.tab === 'chat' || s.tab === 'gpt';
-    return '<div class="tb-box tb-default"><div class="tb-pill">' +
-      '<div class="tb-expand' + (open ? ' is-open' : '') + '"><div><div class="tb-dwindow gm-window" role="dialog" aria-label="' + (s.tab === 'gpt' ? 'GPT' : 'Чат') + '">' +
-        (open ? chatWindow(s.tab) : '') + '</div><div class="divider"></div></div></div>' +
+    s.preset = 0;
+    var layer = s.tab === 'loan'
+      ? '<div class="tb-expand"><div><div class="tb-actions"></div><div class="divider"></div></div></div>'
+      : '<div class="tb-expand' + (open ? ' is-open' : '') + '"><div><div class="tb-dwindow gm-window" role="dialog" aria-label="' + (s.tab === 'gpt' ? 'GPT' : 'Чат') + '">' +
+        (open ? chatWindow(s.tab) : '') + '</div><div class="divider"></div></div></div>';
+    return '<div class="tb-box tb-default"><div class="tb-pill">' + layer +
       '<nav class="tb-tabgroup" aria-label="Разделы">' + TABS.map(function (t) { return tab(t, t.id === s.tab); }).join('') + '</nav>' +
     '</div></div>';
   }
@@ -356,9 +365,11 @@ window.UXMain = (function () {
       body = page();
     }
     root.innerHTML =
-      '<div class="tb gm" data-auth="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '" data-window="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '">' +
+      '<div class="tb gm" data-auth="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '" data-window="' + (s.view === 'main' && s.chat ? 'on' : 'off') +
+        '" data-menu="' + (s.menu ? 'on' : 'off') + '" data-dim="' + (dim() ? 'on' : 'off') + '">' +
         '<div class="tb-scroll tb-enter" tabindex="-1">' + body + '</div>' +
         (s.view === 'login' ? '' : header()) +
+        (dim() ? '<div class="gm-blanket" data-act="dim" aria-hidden="true"></div>' : '') +
         '<div class="tb-bottom">' +
           (s.view === 'login' ? '' : '<div class="tb-bar">' + bar() + '</div>') +
           '<div class="tb-state"></div>' +
@@ -376,12 +387,52 @@ window.UXMain = (function () {
       fitWindow();
       if (window.UXChat) window.UXChat.mounted(root.querySelector('.gm-window'), s, onChat);
     }
+    dimStatusBar();
     if (scrollTop) scroller.scrollTop = scrollTop;
     onScroll();
   }
+  function dim() { return s.menu ? 'menu' : winKind() ? 'window' : ''; }
+  function dimStatusBar() {
+    var scr = root && root.closest('.screen');
+    if (!scr) return;
+    var top = scr.querySelector('.gm-blanket-top');
+    if (!dim()) { if (top) top.remove(); return; }
+    if (!top) {
+      top = document.createElement('div');
+      top.className = 'gm-blanket-top';
+      top.setAttribute('aria-hidden', 'true');
+      top.addEventListener('click', closeDim);
+      scr.appendChild(top);
+    }
+  }
+  function closeDim() {
+    if (!s) return;
+    if (s.menu) { s.menu = false; render(scroller.scrollTop); env.onScreen(screenId()); }
+    else if (winKind()) onChat('close');
+  }
   function onScroll() {
+    if (s.view === 'default' && s.tab === 'loan') { presetByScroll(); return; }
     if (s.view !== 'main') return;
     root.querySelector('.tb').setAttribute('data-auth', s.chat || scroller.scrollTop >= authAt ? 'on' : 'off');
+  }
+  var ACTIONS_STEP = 200;
+  var PRESETS = ['horizontal', 'vertical', 'icon-primary', 'input-button'];
+  var PLUS = '<span class="ico ico-plus" aria-hidden="true"></span>';
+  function pbtn(kind, size, inner) { return '<button class="btn btn-' + kind + '" type="button" data-size-button="' + size + '">' + inner + '</button>'; }
+  function preset(name) {
+    if (name === 'horizontal') return '<div class="tb-group">' + pbtn('secondary', 'large', PLUS + 'Button') + pbtn('primary', 'large', PLUS + 'Button') + '</div>';
+    if (name === 'vertical') return '<div class="tb-group tb-group-vertical">' + pbtn('secondary', 'large', 'Button') + pbtn('primary', 'large', 'Button') + '</div>';
+    if (name === 'icon-primary') return '<div class="tb-group"><button class="btn btn-secondary btn-icon-only" type="button" data-size-button="large" aria-label="Добавить">' + PLUS + '</button>' + pbtn('primary', 'large', PLUS + 'Button') + '</div>';
+    return '<div class="tb-group tb-group-input"><input class="input" type="text" placeholder="Label" aria-label="Поле">' + pbtn('primary', 'xlarge', PLUS + 'Button') + '</div>';
+  }
+  function presetByScroll() {
+    var step = Math.min(PRESETS.length, Math.floor(scroller.scrollTop / ACTIONS_STEP));
+    if (step === s.preset) return;
+    s.preset = step;
+    var expand = root.querySelector('.tb-default .tb-expand');
+    if (!expand) return;
+    if (step > 0) root.querySelector('.tb-actions').innerHTML = preset(PRESETS[step - 1]);
+    expand.classList.toggle('is-open', step > 0);
   }
   function go(next, scrollTop) {
     s = next;
@@ -409,7 +460,8 @@ window.UXMain = (function () {
       if (s.menu) s.chat = false;
       var y = scroller.scrollTop;
       render(y);
-      root.querySelector('.gm-menu-btn').focus();
+      var mb = root.querySelector('.gm-menu-btn');
+      if (mb && mb.offsetWidth) mb.focus();
       env.onScreen(screenId());
     } else if (act === 'collapse') {
       var open = el.getAttribute('aria-expanded') !== 'true';
@@ -429,6 +481,8 @@ window.UXMain = (function () {
     } else if (act === 'care') {
       if (window.UXChat) window.UXChat.open(s.view === 'default' ? 'chat' : 'guest');
       go(s.view === 'default' ? { view: 'default', tab: 'chat' } : { view: 'main', chat: true }, scroller.scrollTop);
+    } else if (act === 'dim') {
+      closeDim();
     } else if (act === 'a11y') {
       if (!env.ui) return;
       var on = /^availability/.test(env.ui());
@@ -500,6 +554,8 @@ window.UXMain = (function () {
       root.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', fitWindow);
       if (window.UXChat) window.UXChat.stop();
+      var top = root.closest('.screen') && root.closest('.screen').querySelector('.gm-blanket-top');
+      if (top) top.remove();
       root.innerHTML = '';
       root = env = s = scroller = calc = null;
     }
