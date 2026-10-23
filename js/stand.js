@@ -170,6 +170,7 @@
           promo: state.promo,
           variant: flow.variant,
           onScreen: function (id) { state.screen = id; writeHash(); },
+          ui: function (id) { if (id && UI[id]) { state.ui = id; apply(); } return state.ui; },
           onPromo: function (p) { state.promo = p; writeHash(); }
         });
       } else {

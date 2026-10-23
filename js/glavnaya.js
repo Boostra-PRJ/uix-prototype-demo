@@ -41,7 +41,7 @@ window.UXMain = (function () {
     'Оплатить заём можно с помощью банковских карт платёжных систем Visa, MasterCard, МИР. При оплате банковской картой безопасность платежей гарантирует центр обработки платежей Best2Pay. Приём платежей происходит через защищённое безопасное соединение. Используется безопасность транспортного уровня. Компания Best2Pay соответствует международным требованиями стандарта безопасности индустрии платёжных карт, что обеспечивает безопасность оплаты. Реквизиты карты, регистрационные данные и др. не поступают в Интернет-магазин. Их обработка производится на стороне центра обработки платежей Best2Pay и полностью защищена. Никто, в том числе ООО «Финтех-Маркет», не может получить банковские и персональные данные плательщика.'
   ];
   var CALC = { min: 1000, max: 50000, step: 1000, pdlMax: 30000, termMin: 5, termMax: 30, termFirst: 16, rate: 0.008, rateIP: 0.007 };
-  var root = null, env = null, s = null, scroller = null, calc = null, authAt = 900;
+  var root = null, env = null, s = null, scroller = null, calc = null, authAt = 900, uiBefore = '';
   function parse(id) {
     var parts = (id || '').split('.');
     var m = /^(main|main-menu|main-chat|login-(phone|tid|gos)|default-(chat|gpt|loan|card|more))$/.exec(parts[0]);
@@ -221,7 +221,7 @@ window.UXMain = (function () {
   }
   function footer() {
     var F = A + 'footer/';
-    return '<footer class="gm-footer" data-color-scheme="light">' +
+    return '<footer class="gm-footer" data-color-scheme="light" data-contrast="on">' +
       '<div class="gm-foot-grid gm-foot-columns">' +
       '<div class="gm-foot-col"><p class="gm-row-title">Связь</p><div class="gm-foot-contacts">' +
         contact('8 800 333 30 73', 'Бесплатно по России') + contact('8 800 350 66 91', 'Служба заботы о клиентах') +
@@ -235,8 +235,8 @@ window.UXMain = (function () {
         '<div class="gm-foot-service"><p class="gm-row-title">Скачать приложение</p>' +
           '<a class="gm-foot-app gm-body" href="#" data-act="soon"><img src="' + F + 'app-icon.svg" alt="">Boostra</a></div>' +
         '<div class="gm-foot-service"><p class="gm-row-title">Наши соцсети</p><div class="gm-foot-social">' +
-          '<button class="gm-foot-btn is-icon" type="button" data-act="soon" aria-label="Telegram"><img src="' + F + 'telegram.svg" alt=""></button>' +
-          '<button class="gm-foot-btn is-icon" type="button" data-act="soon" aria-label="ВКонтакте"><img src="' + F + 'vk.svg" alt=""></button>' +
+          '<button class="gm-foot-btn is-icon" type="button" data-act="soon" aria-label="Telegram"><span class="gm-ico gm-ico-tg" aria-hidden="true"></span></button>' +
+          '<button class="gm-foot-btn is-icon" type="button" data-act="soon" aria-label="ВКонтакте"><span class="gm-ico gm-ico-vk" aria-hidden="true"></span></button>' +
         '</div></div>' +
       '</div>' +
       '<div class="gm-foot-divider"></div>' +
@@ -245,18 +245,14 @@ window.UXMain = (function () {
         return '<div class="gm-foot-col"><p class="gm-row-title">' + g[0] + '</p>' + g[1].map(sub).join('') + '</div>';
       }).join('') + '</nav>' +
       '<div class="gm-foot-divider"></div>' +
-      '<div class="gm-foot-bottom">' +
-        '<div class="gm-foot-legal">' +
-          '<div class="gm-foot-col"><p class="gm-row-title">Юридическая информация</p>' +
-            '<div class="gm-legal t-caption">' + LEGAL.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div></div>' +
-          '<p class="gm-copy t-note">© 2026, ООО «Финтех-Маркет»</p>' +
-          '<div><button class="gm-foot-btn" type="button" data-act="soon"><span class="gm-ico gm-ico-eye" aria-hidden="true"></span>Версия для слабовидящих</button></div>' +
-        '</div>' +
-        '<div class="gm-foot-docs">' +
-          '<div class="gm-foot-col"><p class="gm-row-title">Документы</p>' + DOCS.map(sub).join('') + '</div>' +
-          '<div class="gm-foot-col"><p class="gm-row-title">Регулятор</p>' + REGULATOR.map(sub).join('') + '</div>' +
-        '</div>' +
+      '<div class="gm-foot-grid gm-foot-bottom">' +
+        '<div class="gm-foot-col gm-foot-legal"><p class="gm-row-title">Юридическая информация</p>' +
+          '<div class="gm-legal t-caption">' + LEGAL.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div></div>' +
+        '<div class="gm-foot-col gm-foot-docs"><p class="gm-row-title">Документы</p>' + DOCS.map(sub).join('') + '</div>' +
+        '<div class="gm-foot-col gm-foot-reg"><p class="gm-row-title">Регулятор</p>' + REGULATOR.map(sub).join('') + '</div>' +
       '</div>' +
+      '<div class="gm-foot-copy"><p class="gm-copy t-note">© 2026, ООО «Финтех-Маркет»</p>' +
+        '<button class="gm-foot-btn" type="button" data-act="a11y" aria-pressed="' + /^availability/.test(env.ui ? env.ui() : '') + '"><span class="gm-ico gm-ico-eye" aria-hidden="true"></span>Версия для слабовидящих</button></div>' +
     '</footer>';
   }
   function page() {
@@ -433,6 +429,12 @@ window.UXMain = (function () {
     } else if (act === 'care') {
       if (window.UXChat) window.UXChat.open(s.view === 'default' ? 'chat' : 'guest');
       go(s.view === 'default' ? { view: 'default', tab: 'chat' } : { view: 'main', chat: true }, scroller.scrollTop);
+    } else if (act === 'a11y') {
+      if (!env.ui) return;
+      var on = /^availability/.test(env.ui());
+      if (!on) uiBefore = env.ui();
+      env.ui(on ? uiBefore || 'light' : 'availability-black');
+      el.setAttribute('aria-pressed', String(!on));
     } else if (act === 'tooltip') {
       var tip = root.querySelector('#gm-tooltip');
       tip.hidden = !tip.hidden;
