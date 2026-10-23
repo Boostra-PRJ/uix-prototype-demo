@@ -356,8 +356,9 @@ window.UXMain = (function () {
       body = page();
     }
     root.innerHTML =
-      '<div class="tb gm" data-auth="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '" data-window="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '">' +
+      '<div class="tb gm" data-auth="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '" data-window="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '" data-menu="' + (s.menu ? 'on' : 'off') + '">' +
         '<div class="tb-scroll tb-enter" tabindex="-1">' + body + '</div>' +
+        (s.menu ? '<div class="gm-blanket" data-act="menu" aria-hidden="true"></div>' : '') +
         (s.view === 'login' ? '' : header()) +
         '<div class="tb-bottom">' +
           (s.view === 'login' ? '' : '<div class="tb-bar">' + bar() + '</div>') +
@@ -409,7 +410,8 @@ window.UXMain = (function () {
       if (s.menu) s.chat = false;
       var y = scroller.scrollTop;
       render(y);
-      root.querySelector('.gm-menu-btn').focus();
+      var mb = root.querySelector('.gm-menu-btn');
+      if (mb && mb.offsetWidth) mb.focus();
       env.onScreen(screenId());
     } else if (act === 'collapse') {
       var open = el.getAttribute('aria-expanded') !== 'true';
