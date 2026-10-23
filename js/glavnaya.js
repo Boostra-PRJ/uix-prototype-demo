@@ -207,15 +207,11 @@ window.UXMain = (function () {
     '</ul></section>';
   }
   function gptBanner() {
-    return '<section class="gm-gpt" aria-label="booGPT">' +
-      '<div class="gm-gpt-text"><h2 class="gm-gpt-title">Ответы,<br class="gm-m"> на все вопросы!</h2>' +
-        '<p class="t-caption">Регистрируйся и получи доступ<br class="gm-d"> к бесплатному сервису b-GPT!</p></div>' +
-      '<div class="gm-gpt-pic" aria-hidden="true">' +
-        '<img class="gm-gpt-frame" src="' + A + 'main/gpt-iphone-frame@2x.png" alt="">' +
-        '<img class="gm-gpt-screen gm-m" src="' + A + 'main/gpt-phone-screen.svg" alt="">' +
-        '<img class="gm-gpt-screen gm-d" src="' + A + 'main/gpt-phone-screen-desktop.svg" alt="">' +
-        '<img class="gm-gpt-logo" src="' + A + 'main/gpt-logo-boogpt.svg" alt="">' +
-      '</div>' +
+    return '<section class="gm-boo" aria-labelledby="gm-boo-title">' +
+      '<img class="gm-boo-logo" src="assets/glavnaya/chat/logo-gpt.svg" alt="booGPT">' +
+      '<div class="gm-boo-text"><h2 class="gm-boo-title" id="gm-boo-title">ИИ-ассистент по твоим займам</h2>' +
+        '<p class="gm-body">Посчитает платежи и подскажет, как снизить переплату. Доступен клиентам Бустры — после первого займа</p></div>' +
+      '<button class="btn btn-secondary" type="button" data-size-button="medium" data-act="boo">Попробовать booGPT</button>' +
     '</section>';
   }
   function footer() {
@@ -432,6 +428,14 @@ window.UXMain = (function () {
     } else if (act === 'care') {
       if (window.UXChat) window.UXChat.open(s.view === 'default' ? 'chat' : 'guest');
       go(s.view === 'default' ? { view: 'default', tab: 'chat' } : { view: 'main', chat: true }, scroller.scrollTop);
+    } else if (act === 'boo') {
+      if (s.view === 'default') {
+        if (window.UXChat) window.UXChat.open('gpt');
+        go({ view: 'default', tab: 'gpt' }, scroller.scrollTop);
+      } else {
+        root.querySelector('.tb').setAttribute('data-auth', 'on');
+        requestAnimationFrame(function () { var first = root && root.querySelector('.tb-auth .btn'); if (first) first.focus(); });
+      }
     } else if (act === 'tooltip') {
       var tip = root.querySelector('#gm-tooltip');
       tip.hidden = !tip.hidden;
