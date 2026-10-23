@@ -142,7 +142,8 @@ window.UXMain = (function () {
       '<span class="gm-vline" aria-hidden="true"></span>' +
       '<div class="gm-desk-sub" role="tabpanel">' + (g[1] ? '<p class="gm-desk-sub-title">' + g[0] + '</p>' : '') +
         '<div class="gm-desk-cols">' + cols.map(function (c) {
-          if (!c) return '<div class="gm-desk-promo" aria-hidden="true"></div>';
+          if (!c) return '<div class="gm-desk-promo"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
+            '<div class="tb-wc-text"><p class="tb-wc-title">Классный оффер</p><p class="tb-wc-sub">уже в пути</p></div></div></div>';
           if (!g[1]) return '<div><p class="gm-desk-sub-title">' + c[0] + '</p>' + c.slice(1).map(sub).join('') + '</div>';
           return '<div>' + c.map(sub).join('') + '</div>';
         }).join('') + '</div>' +
@@ -207,11 +208,15 @@ window.UXMain = (function () {
     '</ul></section>';
   }
   function gptBanner() {
-    return '<section class="gm-boo" aria-labelledby="gm-boo-title">' +
-      '<img class="gm-boo-logo" src="assets/glavnaya/chat/logo-gpt.svg" alt="booGPT">' +
-      '<div class="gm-boo-text"><h2 class="gm-boo-title" id="gm-boo-title">ИИ-ассистент по твоим займам</h2>' +
-        '<p class="gm-body">Посчитает платежи и подскажет, как снизить переплату. Доступен клиентам Бустры — после первого займа</p></div>' +
-      '<button class="btn btn-secondary" type="button" data-size-button="medium" data-act="boo">Попробовать booGPT</button>' +
+    return '<section class="gm-gpt" aria-label="booGPT">' +
+      '<div class="gm-gpt-text"><h2 class="gm-gpt-title">Ответы,<br class="gm-m"> на все вопросы!</h2>' +
+        '<p class="t-caption">Регистрируйся и получи доступ<br class="gm-d"> к бесплатному сервису b-GPT!</p></div>' +
+      '<div class="gm-gpt-pic" aria-hidden="true">' +
+        '<img class="gm-gpt-frame" src="' + A + 'main/gpt-iphone-frame@2x.png" alt="">' +
+        '<img class="gm-gpt-screen gm-m" src="' + A + 'main/gpt-phone-screen.svg" alt="">' +
+        '<img class="gm-gpt-screen gm-d" src="' + A + 'main/gpt-phone-screen-desktop.svg" alt="">' +
+        '<img class="gm-gpt-logo" src="' + A + 'main/gpt-logo-boogpt.svg" alt="">' +
+      '</div>' +
     '</section>';
   }
   function footer() {
@@ -428,14 +433,6 @@ window.UXMain = (function () {
     } else if (act === 'care') {
       if (window.UXChat) window.UXChat.open(s.view === 'default' ? 'chat' : 'guest');
       go(s.view === 'default' ? { view: 'default', tab: 'chat' } : { view: 'main', chat: true }, scroller.scrollTop);
-    } else if (act === 'boo') {
-      if (s.view === 'default') {
-        if (window.UXChat) window.UXChat.open('gpt');
-        go({ view: 'default', tab: 'gpt' }, scroller.scrollTop);
-      } else {
-        root.querySelector('.tb').setAttribute('data-auth', 'on');
-        requestAnimationFrame(function () { var first = root && root.querySelector('.tb-auth .btn'); if (first) first.focus(); });
-      }
     } else if (act === 'tooltip') {
       var tip = root.querySelector('#gm-tooltip');
       tip.hidden = !tip.hidden;

@@ -21,7 +21,7 @@ window.UXChat = (function () {
   function clear() { timers.forEach(clearTimeout); timers = []; }
   function header(mode) {
     var h = HEAD[mode];
-    var left = mode === 'gpt' ? svc('history', 'История', 'history', 20) : '';
+    var left = mode === 'gpt' ? svc('menu-2', 'Меню: история чатов', 'history', 20) : '';
     var right = mode === 'gpt' ? svc('new-chat', 'Новый чат', 'new', 20) : svc('chevron-down', 'Свернуть', 'close', 20);
     return '<div class="ch-head">' + left +
       '<img class="ch-avatar" src="' + A + 'avatar-illustration-40@2x.png" width="40" height="40" alt="">' +
@@ -170,9 +170,9 @@ window.UXChat = (function () {
             { icon: 'currency-rubel', title: 'Мои финансы', sub: 'Займы и кредитная история', act: 'soon' }
           ]) + '<p class="ch-h3">История</p>' +
           rows([
-            { icon: 'message', title: 'Сколько я должен?', sub: 'Сегодня, 10:36', act: 'history-open' },
-            { icon: 'message', title: 'Как повысить шанс', sub: 'Вчера', act: 'soon' },
-            { icon: 'message', title: 'Почему мне отказали', sub: '18 октября', act: 'soon' }
+            { icon: 'history', title: 'Сколько я должен?', sub: 'Сегодня, 10:36', act: 'history-open' },
+            { icon: 'history', title: 'Как повысить шанс', sub: 'Вчера', act: 'soon' },
+            { icon: 'history', title: 'Почему мне отказали', sub: '18 октября', act: 'soon' }
           ]) };
     }
     return screen(SCREENS[kind][0]);
