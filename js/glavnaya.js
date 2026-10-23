@@ -130,7 +130,7 @@ window.UXMain = (function () {
     var cols;
     if (g[1]) {
       var half = Math.ceil(g[1].length / 2);
-      cols = [g[1].slice(0, half), g[1].slice(half), null];
+      cols = [g[1].slice(0, half), g[1].slice(half)];
     } else {
       cols = FOOT_COLS.map(function (c) { return [c[0]].concat(c[1]); });
     }
@@ -144,12 +144,12 @@ window.UXMain = (function () {
       '<span class="gm-vline" aria-hidden="true"></span>' +
       '<div class="gm-desk-sub" role="tabpanel">' + (g[1] ? '<p class="gm-desk-sub-title">' + g[0] + '</p>' : '') +
         '<div class="gm-desk-cols">' + cols.map(function (c) {
-          if (!c) return '<div class="gm-desk-promo"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
-            '<div class="tb-wc-text"><p class="tb-wc-title">Классный оффер</p><p class="tb-wc-sub">уже в пути</p></div></div></div>';
           if (!g[1]) return '<div><p class="gm-desk-sub-title">' + c[0] + '</p>' + c.slice(1).map(sub).join('') + '</div>';
           return '<div>' + c.map(sub).join('') + '</div>';
         }).join('') + '</div>' +
       '</div>' +
+      (g[1] ? '<div class="gm-desk-promo"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
+        '<div class="tb-wc-text"><p class="tb-wc-title">Классный оффер</p><p class="tb-wc-sub">уже в пути</p></div></div></div>' : '') +
     '</div>';
   }
   function hero() {
