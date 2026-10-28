@@ -116,7 +116,7 @@ window.UXChat = (function () {
         composer: 'Чем помочь?' };
       case 'chat-start': return { head: 'chat', top: true,
         feed: greeting('Привет, Станислав! 👋', 'Я Мария, ИИ-помощник Бустры. Выбери тему или напиши вопрос'),
-        chips: chips(['Заём', 'Оплата', 'Документы', 'Отсрочка', 'Кабинет', 'БКИ', 'Техвопросы', 'Оператор'], 'topic'), composer: 'Чем помочь?' };
+        chips: chips(['Заём', 'Оплата', 'Документы', 'Отсрочка', 'Кабинет', 'Оператор'], 'topic'), composer: 'Чем помочь?' };
       case 'chat-loading': return { head: 'chat', top: true, busy: true,
         feed: '<div class="ch-skels" aria-hidden="true"><span style="width:240px;height:72px"></span><span style="width:279px"></span><span style="width:200px"></span><span style="width:160px"></span></div>',
         composer: 'Чем помочь?' };
@@ -143,7 +143,7 @@ window.UXChat = (function () {
       case 'gpt-start':
       case 'gpt-start-loan': return { head: 'gpt', top: true,
         feed: '<div class="ch-gpt-top">' + greeting('Привет, Станислав! 👋', 'Я Вера, помогу с займами') + reminder(id === 'gpt-start-loan') + '</div>',
-        chips: chips(id === 'gpt-start-loan' ? ['Внести платёж', 'Почему отказали', ['Снизить платежи']] : ['Мои займы', 'Почему отказали', 'Шанс одобрения', ['Снизить платежи']], 'ask'),
+        chips: chips(['Мои займы', 'Почему отказали', ['Снизить платежи']], 'ask'),
         composer: 'Чем помочь?' };
       case 'gpt-typing': return { head: 'gpt', busy: true,
         feed: msg('user', said('gpt', 'Сколько я должен?'), { time: '10:36' }) + typing('Вера считает…'), composer: 'Спроси Веру о своих займах' };
@@ -213,7 +213,7 @@ window.UXChat = (function () {
     } else if (kind === 'chat') {
       if (st.chat === 'chat-operator') { st.said['chat-operator'] = text; show('chat-operator'); }
       else if (/оператор/i.test(text)) { st.said['chat-operator-wait'] = /^оператор$/i.test(text) ? 'Позовите оператора' : text; show('chat-operator-wait'); }
-      else if (/^техвопросы$/i.test(text)) { st.said['chat-offline'] = 'Как продлить заём?'; st.toast = true; show('chat-offline'); }
+      else if (/^кабинет$/i.test(text)) { st.said['chat-offline'] = 'Как продлить заём?'; st.toast = true; show('chat-offline'); }
       else { st.said['chat-answer'] = /^заём$/i.test(text) ? 'Как продлить заём?' : text; show('chat-answer'); }
     } else {
       if (st.gpt === 'gpt-answer' || /снизить/i.test(text)) { st.said['gpt-support'] = /^снизить платежи$/i.test(text) ? 'Хочу оспорить начисление процентов' : text; st.alertHidden = false; show('gpt-support'); return; }

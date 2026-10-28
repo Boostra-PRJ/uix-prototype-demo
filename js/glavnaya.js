@@ -13,9 +13,68 @@ window.UXMain = (function () {
     gos: 'Вход через Госуслуги — экран в работе'
   };
   var A = 'assets/glavnaya/';
-  var LOANS = [
-    ["По типу займов", [["Займ на карту", "https://boostra.ru/"], ["Через СБП", "https://boostra.ru/pages/zaym-cherez-sbp/"], ["Без процентов", "https://boostra.ru/pages/zaym-bez-protsentov/"], ["По номеру телефона", "https://boostra.ru/pages/zaym-po-nomeru-telefona/"], ["Без фото", "https://boostra.ru/pages/zaym-bez-foto-dokumentov/"], ["Минизайм", "https://boostra.ru/pages/minizaymy/"], ["Без отказа", "https://boostra.ru/pages/zajmy-bez-otkaza/"], ["Без проверок", "https://boostra.ru/pages/zaym-bez-proverok-na-kartu/"], ["По паспорту", "https://boostra.ru/pages/zaym-po-pasportu/"], ["Без СНИЛС", "https://boostra.ru/pages/zaym-bez-snils/"], ["Круглосуточно", "https://boostra.ru/pages/zaym-kruglosutochno/"], ["Без звонков", "https://boostra.ru/pages/zaym-bez-zvonkov/"]]], ["По сумме займа", [["На 3000 рублей", "https://boostra.ru/pages/zaym-na-3000-rubley/"], ["На 5000 рублей", "https://boostra.ru/pages/zaym-na-5000-rubley/"], ["На 10000 рублей", "https://boostra.ru/pages/zaym-na-10000-rubley/"], ["На 15000 рублей", "https://boostra.ru/pages/zaym-na-15000-rubley/"], ["На 30000 рублей", "https://boostra.ru/pages/zaym-na-30000-rubley/"], ["На 1000 рублей", "https://boostra.ru/pages/zaym-na-1000-rubley/"], ["На 2000 рублей", "https://boostra.ru/pages/zaym-na-2000-rubley/"], ["На 20000 рублей", "https://boostra.ru/pages/zaym-na-20000-rubley/"], ["На 40000 рублей", "https://boostra.ru/pages/zaym-na-40000-rubley/"], ["На 50000 рублей", "https://boostra.ru/pages/zaym-na-50000-rubley/"]]], ["По карте", [["На карту ОЗОН", "https://boostra.ru/pages/zaym-na-kartu-ozon/"], ["На карту Сбера", "https://boostra.ru/pages/zaym-na-kartu-sber/"], ["На карту Т-Банка", "https://boostra.ru/pages/zaym-na-kartu-t-banka/"], ["На карту Альфа-Банка", "https://boostra.ru/pages/zaym-na-kartu-alfabanka/"], ["На карту ВТБ", "https://boostra.ru/pages/zaym-na-kartu-vtb-24/"], ["На карту Мир", "https://boostra.ru/pages/zaym-na-kartu-mir/"], ["На карту Газпромбанка", "https://boostra.ru/pages/zaym-na-kartu-gazprombanka/"], ["На карту Совкомбанка", "https://boostra.ru/pages/zaym-na-kartu-sovkombanka/"], ["На карту Wildberries Банка", "https://boostra.ru/pages/zaym-na-kartu-wildberries-banka/"], ["На карту МТС Банка", "https://boostra.ru/pages/zaym-na-kartu-mts-banka/"]]], ["По группе заёмщиков", [["Студентам", "https://boostra.ru/pages/zaym-studentam/"], ["Самозанятым", "https://boostra.ru/pages/zaym-samozanyatym/"], ["Военнослужащим", "https://boostra.ru/pages/zaym-voennosluzhashchim/"], ["Безработным", "https://boostra.ru/pages/zaym-bezrabotnym/"], ["Для физических лиц", "https://boostra.ru/pages/zaym-dlya-fizicheskikh-lits/"], ["Пенсионерам", "https://boostra.ru/pages/zaym-dlya-pensionerov/"], ["С 18 лет", "https://boostra.ru/pages/zaym-s-18-let/"], ["До 75 лет", "https://boostra.ru/pages/zaym-do-75-let/"], ["С 21 года", "https://boostra.ru/pages/zaym-s-21-goda/"]]], ["По проблеме", [["С плохой кредитной историей", "https://boostra.ru/pages/zaym-s-plokhoy-kreditnoy-istoriey/"], ["До зарплаты", "https://boostra.ru/pages/zaym-do-zarplaty/"], ["С просрочками", "https://boostra.ru/pages/zaym-s-prosrochkami/"], ["Для исправления кредитной истории", "https://boostra.ru/pages/zaym-dlya-ispravleniya-kreditnoy-istorii/"], ["На погашение других займов", "https://boostra.ru/pages/zaym-na-pogashenie-drugikh-zaymov/"], ["Должникам", "https://boostra.ru/pages/zaym-dolzhnikam/"], ["Без проверки кредитной истории", "https://boostra.ru/pages/zaym-bez-proverki-kreditnoy-istorii/"], ["После банкротства", "https://boostra.ru/pages/zaym-posle-bankrotstva/"], ["С нулевым балансом на карте", "https://boostra.ru/pages/zaym-na-kartu-s-nulevym-balansom/"], ["В день обращения", "https://boostra.ru/pages/zaym-v-den-obrashcheniya/"], ["На оплату ЖКХ", "https://boostra.ru/pages/zaym-na-oplatu-zhkkh/"], ["Без подтверждения дохода", "https://boostra.ru/pages/zaym-bez-podtverzhdeniya-dokhoda/"]]]];
-  var MORE = ['Внести платёж', 'Вопросы и ответы', 'Информация для клиентов', 'Пожаловаться', 'О компании', 'Контакты', 'Подбор микрозайма', 'Статьи', 'Карта сайта'];
+  var MENU = [
+    ["По типу", [["Документы", [["По паспорту", "https://boostra.ru/pages/zaym-po-pasportu/"],
+      ["По номеру телефона", "https://boostra.ru/pages/zaym-po-nomeru-telefona/"],
+      ["Без СНИЛС", "https://boostra.ru/pages/zaym-bez-snils/"],
+      ["Без фото", "https://boostra.ru/pages/zaym-bez-foto-dokumentov/"]]],
+      ["Оформление", [["Заём на карту", "https://boostra.ru/"],
+      ["Через СБП", "https://boostra.ru/pages/zaym-cherez-sbp/"],
+      ["Круглосуточно", "https://boostra.ru/pages/zaym-kruglosutochno/"],
+      ["Без проверок", "https://boostra.ru/pages/zaym-bez-proverok-na-kartu/"]]],
+      ["Условия", [["Без процентов", "https://boostra.ru/pages/zaym-bez-protsentov/"],
+      ["Мини-заём", "https://boostra.ru/pages/minizaymy/"],
+      ["Без отказа", "https://boostra.ru/pages/zajmy-bez-otkaza/"],
+      ["Без звонков", "https://boostra.ru/pages/zaym-bez-zvonkov/"]]]]],
+      ["По сумме", [["1000 – 10 000", [["От 1000 рублей", "https://boostra.ru/pages/zaym-na-1000-rubley/"],
+      ["От 2000 рублей", "https://boostra.ru/pages/zaym-na-2000-rubley/"],
+      ["От 3000 рублей", "https://boostra.ru/pages/zaym-na-3000-rubley/"],
+      ["От 5000 рублей", "https://boostra.ru/pages/zaym-na-5000-rubley/"],
+      ["От 10 000 рублей", "https://boostra.ru/pages/zaym-na-10000-rubley/"]]],
+      ["15 000 – 50 000", [["От 15 000 рублей", "https://boostra.ru/pages/zaym-na-15000-rubley/"],
+      ["От 20 000 рублей", "https://boostra.ru/pages/zaym-na-20000-rubley/"],
+      ["От 30 000 рублей", "https://boostra.ru/pages/zaym-na-30000-rubley/"],
+      ["От 40 000 рублей", "https://boostra.ru/pages/zaym-na-40000-rubley/"],
+      ["От 50 000 рублей", "https://boostra.ru/pages/zaym-na-50000-rubley/"]]]]],
+      ["По карте", [["По карте", [["На карту ОЗОН", "https://boostra.ru/pages/zaym-na-kartu-ozon/"],
+      ["На карту Сбера", "https://boostra.ru/pages/zaym-na-kartu-sber/"],
+      ["На карту Т-Банка", "https://boostra.ru/pages/zaym-na-kartu-t-banka/"],
+      ["На карту Альфа-Банка", "https://boostra.ru/pages/zaym-na-kartu-alfabanka/"],
+      ["На карту ВТБ", "https://boostra.ru/pages/zaym-na-kartu-vtb-24/"],
+      ["На карту Мир", "https://boostra.ru/pages/zaym-na-kartu-mir/"],
+      ["На карту Газпромбанка", "https://boostra.ru/pages/zaym-na-kartu-gazprombanka/"],
+      ["На карту Совкомбанка", "https://boostra.ru/pages/zaym-na-kartu-sovkombanka/"],
+      ["На карту Wildberries Банка", "https://boostra.ru/pages/zaym-na-kartu-wildberries-banka/"],
+      ["На карту МТС Банка", "https://boostra.ru/pages/zaym-na-kartu-mts-banka/"]]]]],
+      ["Кому подойдёт", [["По занятости", [["Без официальной работы", ""],
+      ["Самозанятым", "https://boostra.ru/pages/zaym-samozanyatym/"],
+      ["Студентам", "https://boostra.ru/pages/zaym-studentam/"],
+      ["Военнослужащим", "https://boostra.ru/pages/zaym-voennosluzhashchim/"],
+      ["Пенсионерам", "https://boostra.ru/pages/zaym-dlya-pensionerov/"],
+      ["Предпринимателям", "", "Новинка"]]],
+      ["По возрасту", [["С 18 лет", "https://boostra.ru/pages/zaym-s-18-let/"],
+      ["С 21 года", "https://boostra.ru/pages/zaym-s-21-goda/"],
+      ["До 75 лет", "https://boostra.ru/pages/zaym-do-75-let/"]]]]],
+      ["По ситуации", [["Кредитная история", [["С любой кредитной историей", ""],
+      ["Если были просрочки", "https://boostra.ru/pages/zaym-s-prosrochkami/"],
+      ["После банкротства", "https://boostra.ru/pages/zaym-posle-bankrotstva/"],
+      ["Без справки о доходах", "https://boostra.ru/pages/zaym-bez-podtverzhdeniya-dokhoda/"]]],
+      ["Когда нужны деньги", [["До зарплаты", "https://boostra.ru/pages/zaym-do-zarplaty/"],
+      ["Срочно, в день обращения", "https://boostra.ru/pages/zaym-v-den-obrashcheniya/"],
+      ["Когда на карте ноль", "https://boostra.ru/pages/zaym-na-kartu-s-nulevym-balansom/"]]],
+      ["На что", [["На оплату ЖКХ", "https://boostra.ru/pages/zaym-na-oplatu-zhkkh/"],
+      ["На погашение других займов", "https://boostra.ru/pages/zaym-na-pogashenie-drugikh-zaymov/"],
+      ["Если есть другие займы", ""],
+      ["Чтобы улучшить кредитную историю", "https://boostra.ru/pages/zaym-dlya-ispravleniya-kreditnoy-istorii/"]]]]],
+      ["Ещё", [["Клиентам", [["Внести платёж", ""],
+      ["Вопросы и ответы", ""],
+      ["Информация для клиентов", ""],
+      ["Подать обращение", ""]]],
+      ["Компания", [["О компании", ""],
+      ["Контакты", ""]]],
+      ["Полезное", [["Подбор займа", ""],
+      ["Статьи", ""],
+      ["Все займы", ""]]]]]];
   var FOOT_COLS = [
     ['Клиентам', ['Личный кабинет', 'Внести платёж', 'Вопросы и ответы', 'Информация для клиентов', 'Пожаловаться']],
     ['Компания', ['О компании', 'Контакты', 'Жалоба финансовому омбудсмену']],
@@ -75,18 +134,25 @@ window.UXMain = (function () {
   function date(d) { return String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear(); }
   function sub(item) {
     var text = typeof item === 'string' ? item : item[0], url = typeof item === 'string' ? '' : item[1];
-    return url ? '<a class="gm-sub t-note" href="' + url + '" target="_blank" rel="noopener">' + text + '</a>'
-      : '<a class="gm-sub t-note" href="#" data-act="soon">' + text + '</a>';
+    var badge = typeof item === 'string' || !item[2] ? '' : '<span class="gm-sub-badge">' + item[2] + '</span>';
+    return url ? '<a class="gm-sub t-note" href="' + url + '" target="_blank" rel="noopener">' + text + badge + '</a>'
+      : '<a class="gm-sub t-note" href="#" data-act="soon">' + text + badge + '</a>';
+  }
+  function groups(sec, flat) {
+    if (flat) return sec[1].reduce(function (a, g) { return a.concat(g[1]); }, []).map(sub).join('');
+    return sec[1].map(function (g) {
+      return '<div class="gm-subgroup">' + (sec[1].length > 1 || sec[0] !== 'По карте' ? '<p class="gm-subgroup-title">' + g[0] + '</p>' : '') + g[1].map(sub).join('') + '</div>';
+    }).join('');
   }
   function btnNeutral(cls, icon, label, attrs) {
     return '<button class="btn-neutral ' + cls + '" type="button" data-size-button="xlarge" aria-label="' + label + '"' + (attrs || '') + '>' +
       '<span class="btn-content"><span class="gm-ico gm-ico-' + icon + '" aria-hidden="true"></span></span></button>';
   }
-  function collapse(id, title, items) {
+  function collapse(id, title, body) {
     return '<div class="gm-collapse">' +
       '<button class="gm-collapse-head" type="button" data-act="collapse" aria-expanded="false" aria-controls="' + id + '">' +
         '<span>' + title + '</span><span class="gm-chev" aria-hidden="true"></span></button>' +
-      '<div class="gm-collapse-body" id="' + id + '" hidden>' + items.map(sub).join('') + '</div>' +
+      '<div class="gm-collapse-body" id="' + id + '" hidden>' + body + '</div>' +
     '</div>';
   }
   function contact(phone, note) {
@@ -109,8 +175,7 @@ window.UXMain = (function () {
         '<div class="divider"></div>' +
         '<nav class="gm-catalog gm-only-narrow" aria-label="Каталог займов">' +
           '<p class="gm-row-title">Займы</p>' +
-          LOANS.map(function (g, i) { return collapse('gm-m' + i, g[0], g[1]); }).join('') +
-          collapse('gm-m5', 'Ещё', MORE) +
+          MENU.map(function (sec, i) { return collapse('gm-m' + i, sec[0], groups(sec, sec[0] === 'По карте' || sec[0] === 'Ещё')); }).join('') +
         '</nav>' +
         deskMenu() +
         '<div class="divider"></div>' +
@@ -130,30 +195,29 @@ window.UXMain = (function () {
     '</header>';
   }
   function deskMenu() {
-    var all = LOANS.concat([['Ещё', null]]);
-    var g = all[s.deskSection || 0];
-    var cols;
-    if (g[1]) {
-      var half = Math.ceil(g[1].length / 2);
-      cols = [g[1].slice(0, half), g[1].slice(half)];
+    var sec = MENU[s.deskSection || 0], g = sec[1];
+    var cols, inner;
+    if (g.length === 1) {
+      var half = Math.ceil(g[0][1].length / 2);
+      cols = 2;
+      inner = '<p class="gm-desk-sub-title">' + g[0][0] + '</p><div class="gm-desk-cols">' +
+        '<div>' + g[0][1].slice(0, half).map(sub).join('') + '</div><div>' + g[0][1].slice(half).map(sub).join('') + '</div></div>';
     } else {
-      cols = FOOT_COLS.map(function (c) { return [c[0]].concat(c[1]); });
+      cols = g.length;
+      inner = '<div class="gm-desk-cols">' + g.map(function (x) {
+        return '<div><p class="gm-desk-sub-title">' + x[0] + '</p>' + x[1].map(sub).join('') + '</div>';
+      }).join('') + '</div>';
     }
     return '<div class="gm-desk-menu gm-only-wide">' +
       '<div class="gm-desk-catalog" role="tablist" aria-label="Займы" aria-orientation="vertical"><p class="gm-row-title">Займы</p>' +
-        all.map(function (x, i) {
+        MENU.map(function (x, i) {
           var on = i === (s.deskSection || 0);
           return '<button class="gm-desk-item t-note" type="button" role="tab" aria-selected="' + on + '" tabindex="' + (on ? 0 : -1) + '" data-act="section" data-i="' + i + '">' + x[0] + '<span aria-hidden="true"></span></button>';
         }).join('') +
       '</div>' +
       '<span class="gm-vline" aria-hidden="true"></span>' +
-      '<div class="gm-desk-sub" role="tabpanel">' + (g[1] ? '<p class="gm-desk-sub-title">' + g[0] + '</p>' : '') +
-        '<div class="gm-desk-cols">' + cols.map(function (c) {
-          if (!g[1]) return '<div><p class="gm-desk-sub-title">' + c[0] + '</p>' + c.slice(1).map(sub).join('') + '</div>';
-          return '<div>' + c.map(sub).join('') + '</div>';
-        }).join('') + '</div>' +
-      '</div>' +
-      (g[1] ? '<div class="gm-desk-promo"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
+      '<div class="gm-desk-sub" role="tabpanel">' + inner + '</div>' +
+      (cols === 2 ? '<div class="gm-desk-promo"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
         '<div class="tb-wc-text"><p class="tb-wc-title">Классный оффер</p><p class="tb-wc-sub">уже в пути</p></div></div></div>' : '') +
     '</div>';
   }
@@ -239,17 +303,18 @@ window.UXMain = (function () {
       '<div class="gm-foot-services">' +
         '<div class="gm-foot-service"><p class="gm-row-title">Местоположение</p>' +
           '<button class="gm-foot-btn" type="button" data-act="soon"><span class="gm-ico gm-ico-nav" aria-hidden="true"></span>Москва</button></div>' +
-        '<div class="gm-foot-service"><p class="gm-row-title">Скачать приложение</p>' +
-          '<a class="gm-foot-app gm-body" href="#" data-act="soon"><img src="' + F + 'app-icon.svg" alt="">Boostra</a></div>' +
-        '<div class="gm-foot-service"><p class="gm-row-title">Наши соцсети</p><div class="gm-foot-social">' +
-          '<button class="gm-foot-btn is-icon" type="button" data-act="soon" aria-label="Telegram"><span class="gm-ico gm-ico-tg" aria-hidden="true"></span></button>' +
-          '<button class="gm-foot-btn is-icon" type="button" data-act="soon" aria-label="ВКонтакте"><span class="gm-ico gm-ico-vk" aria-hidden="true"></span></button>' +
-        '</div></div>' +
+        '<div class="gm-foot-services-group">' +
+          '<div class="gm-foot-service"><p class="gm-row-title">Скачать приложение</p>' +
+            '<a class="gm-foot-app gm-body" href="#" data-act="soon"><img src="' + F + 'app-icon-boostra.svg" alt="">Boostra-займы</a></div>' +
+          '<div class="gm-foot-service"><p class="gm-row-title">Наши соцсети</p><div class="gm-foot-social">' +
+            '<a class="gm-foot-btn is-icon" href="https://vk.ru/boostra_zaim" target="_blank" rel="noopener" aria-label="ВКонтакте"><span class="gm-ico gm-ico-vk" aria-hidden="true"></span></a>' +
+          '</div></div>' +
+        '</div>' +
       '</div>' +
       '<div class="gm-foot-divider"></div>' +
-      '<nav class="gm-foot-col gm-only-mobile" aria-label="Займы">' + LOANS.map(function (g, i) { return collapse('gm-f' + i, g[0], g[1]); }).join('') + '</nav>' +
-      '<nav class="gm-foot-grid gm-foot-loans gm-only-notmobile" aria-label="Займы">' + LOANS.map(function (g) {
-        return '<div class="gm-foot-col"><p class="gm-row-title">' + g[0] + '</p>' + g[1].map(sub).join('') + '</div>';
+      '<nav class="gm-foot-col gm-only-mobile" aria-label="Займы">' + MENU.slice(0, 5).map(function (sec, i) { return collapse('gm-f' + i, sec[0], groups(sec)); }).join('') + '</nav>' +
+      '<nav class="gm-foot-grid gm-foot-loans gm-only-notmobile" aria-label="Займы">' + MENU.slice(0, 5).map(function (sec) {
+        return '<div class="gm-foot-col"><p class="gm-row-title">' + sec[0] + '</p><div class="gm-foot-groups">' + groups(sec) + '</div></div>';
       }).join('') + '</nav>' +
       '<div class="gm-foot-divider"></div>' +
       '<div class="gm-foot-bottom">' +
