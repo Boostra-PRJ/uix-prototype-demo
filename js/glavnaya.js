@@ -75,6 +75,13 @@ window.UXMain = (function () {
       ["Полезное", [["Подбор займа", ""],
       ["Статьи", ""],
       ["Все займы", ""]]]]]];
+  var FOOT_MENU = MENU.slice(0, 5).map(function (sec) {
+    return [sec[0], sec[1].map(function (g) {
+      return [g[0], g[1].filter(function (it) { return it[0] !== 'Предпринимателям'; }).map(function (it) {
+        return it[0] === 'Заём на карту' ? ['Займ на карту', it[1]] : it;
+      })];
+    })];
+  });
   var FOOT_COLS = [
     ['Клиентам', ['Личный кабинет', 'Внести платёж', 'Вопросы и ответы', 'Информация для клиентов', 'Пожаловаться']],
     ['Компания', ['О компании', 'Контакты', 'Жалоба финансовому омбудсмену']],
@@ -312,8 +319,8 @@ window.UXMain = (function () {
         '</div>' +
       '</div>' +
       '<div class="gm-foot-divider"></div>' +
-      '<nav class="gm-foot-col gm-only-mobile" aria-label="Займы">' + MENU.slice(0, 5).map(function (sec, i) { return collapse('gm-f' + i, sec[0], groups(sec)); }).join('') + '</nav>' +
-      '<nav class="gm-foot-grid gm-foot-loans gm-only-notmobile" aria-label="Займы">' + MENU.slice(0, 5).map(function (sec) {
+      '<nav class="gm-foot-col gm-only-mobile" aria-label="Займы">' + FOOT_MENU.map(function (sec, i) { return collapse('gm-f' + i, sec[0], groups(sec)); }).join('') + '</nav>' +
+      '<nav class="gm-foot-grid gm-foot-loans gm-only-notmobile" aria-label="Займы">' + FOOT_MENU.map(function (sec) {
         return '<div class="gm-foot-col"><p class="gm-row-title">' + sec[0] + '</p><div class="gm-foot-groups">' + groups(sec) + '</div></div>';
       }).join('') + '</nav>' +
       '<div class="gm-foot-divider"></div>' +
