@@ -102,7 +102,7 @@ window.UXFirstFree = (function () {
     else if (act === 'open' && ON_OPEN[promo]) setPromo(ON_OPEN[promo]);
     else if (act === 'take') {
       setPromo(promo === '2w' ? 'mini-2w' : 'mini-1f');
-      window.UXTabBar.takeOffer();
+      window.UXMain.takeOffer();
     }
   }
   function place(screenId) {
@@ -152,14 +152,14 @@ window.UXFirstFree = (function () {
       if (!deadline) deadline = Date.now() + 24 * 3600 * 1000;
       build();
       setPromo(STATES.indexOf(e.promo) >= 0 ? e.promo : '1f', true);
-      window.UXTabBar.mount(host, {
+      window.UXMain.mount(host, {
         screen: e.screen,
         onScreen: function (id) { place(id); env.onScreen(id); }
       });
       env.onPromo(promo);
       ticker = setInterval(tick, 1000);
     },
-    current: function () { return window.UXTabBar.current(); },
+    current: function () { return window.UXMain.current(); },
     currentPromo: function () { return host ? promo : ''; },
     unmount: function () {
       if (!host) return;
@@ -171,7 +171,7 @@ window.UXFirstFree = (function () {
         document.removeEventListener('keydown', onKey);
       }
       if (resizer) resizer.disconnect();
-      window.UXTabBar.unmount();
+      window.UXMain.unmount();
       host = env = layer = watcher = ticker = modal = card = resizer = null;
     }
   };

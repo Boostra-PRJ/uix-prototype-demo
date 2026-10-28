@@ -19,10 +19,9 @@
   var FLOW_GROUPS = [
     { items: {
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
-      'tabbar':     { label: 'TabBar',             icon: 'assets/flow-tabbar.svg', screen: 'tabbar', chrome: 'overlay' },
-      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay' },
-      'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet' },
-      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay' }
+      'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay', lock: ['app'] },
+      'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet', lock: ['app'] },
+      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay', lock: ['app'] }
     } }
   ];
   function glowLayer(cls) {
@@ -101,7 +100,6 @@
       if (!shown) host.removeAttribute('data-player');
     });
   }
-  if (window.UXTabBar) SCREENS.tabbar = window.UXTabBar;
   if (window.UXFirstFree) SCREENS['first-free'] = SCREENS['first-free-sheet'] = window.UXFirstFree;
   if (window.UXMain) SCREENS.glavnaya = window.UXMain;
   var FLOW = {};
@@ -120,7 +118,8 @@
     if (UI[ui]) state.ui = ui;
     if (STYLE[params.get('style')]) state.style = params.get('style');
     if (SIZE[params.get('size')]) state.size = params.get('size');
-    if (FLOW[params.get('flow')]) state.flow = params.get('flow');
+    var flow = params.get('flow') === 'tabbar' ? 'glavnaya' : params.get('flow');
+    if (FLOW[flow]) state.flow = flow;
     state.screen = params.get('screen') || '';
     state.promo = params.get('promo') || '';
     state.tasks = params.get('tasks') === '1';
@@ -137,6 +136,8 @@
     history.replaceState(null, '', '#' + params.toString().replace(/%2C/g, ','));
   }
   function apply() {
+    var lock = FLOW[state.flow].lock || [];
+    if (lock.indexOf(state.size) >= 0) state.size = 'mobile';
     var ui = UI[state.ui], size = SIZE[state.size];
     screen.setAttribute('data-color-scheme', ui.scheme);
     screen.setAttribute('data-typography', ui.type);
@@ -145,6 +146,7 @@
     screen.setAttribute('data-size', state.size);
     document.querySelectorAll('[data-size-btn]').forEach(function (btn) {
       btn.setAttribute('aria-pressed', String(btn.getAttribute('data-size-btn') === state.size));
+      btn.disabled = lock.indexOf(btn.getAttribute('data-size-btn')) >= 0;
     });
     selects.ui.setValue(state.ui);
     selects.style.setValue(state.style);

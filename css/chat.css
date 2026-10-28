@@ -8,8 +8,6 @@
 .tb-dwindow.gm-window { position: relative; align-items: stretch; justify-content: flex-start; padding: var(--space-lg); }
 .tb-window.gm-window { align-items: stretch; padding: var(--space-lg) var(--space-lg) var(--space-9xl); }
 .tb[data-window="off"] .tb-window.gm-window { visibility: hidden; }
-.gm-window.gm-window-soon { align-items: center; justify-content: center; }
-.gm-window-soon .tb-wc { width: 311px; max-width: 100%; }
 .ch-head { display: flex; flex-shrink: 0; align-items: center; gap: var(--space-md); }
 .ch-avatar { display: block; flex-shrink: 0; width: 40px; height: 40px; object-fit: cover; border-radius: var(--circle-avatar-radius-40); }
 .ch-head-text { display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; }

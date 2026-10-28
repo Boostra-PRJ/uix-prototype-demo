@@ -42,13 +42,11 @@ window.UXMain = (function () {
   ];
   var CALC = { min: 1000, max: 50000, step: 1000, pdlMax: 30000, termMin: 5, termMax: 30, termFirst: 16, rate: 0.008, rateIP: 0.007 };
   var root = null, env = null, s = null, scroller = null, calc = null, authAt = 900, uiBefore = '';
-  var mode = 'main', sizeWatch = null;
-  function CHAT() { return mode === 'main' ? window.UXChat : null; }
+  function CHAT() { return window.UXChat || null; }
   function soon() {
     return '<div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
       '<div class="tb-wc-text"><p class="tb-wc-title">Дорабатываем</p><p class="tb-wc-sub">скоро будет красиво</p></div></div>';
   }
-  function isApp() { var scr = root && root.closest('.screen'); return !!scr && scr.getAttribute('data-size') === 'app'; }
   function parse(id) {
     var parts = (id || '').split('.');
     var m = /^(main|main-menu|main-chat|login-(phone|tid|gos)|default-(chat|gpt|loan|card|more))$/.exec(parts[0]);
@@ -210,7 +208,7 @@ window.UXMain = (function () {
     '</section>';
   }
   function info() {
-    return '<section class="gm-info" aria-labelledby="gm-info-title"><h2 class="gm-h3" id="gm-info-title">Boostra это</h2><ul>' +
+    return '<section class="gm-info" aria-labelledby="gm-info-title"><h2 class="gm-h3" id="gm-info-title">Бустра это</h2><ul>' +
       '<li class="gm-body"><img src="' + A + 'main/info-user-heart-24.svg" alt="">Более 3 000 000 клиентов</li>' +
       '<li class="gm-body"><img src="' + A + 'main/info-rocket-24.svg" alt="">Лидер по выдаче займов</li>' +
       '<li class="gm-body"><span class="gm-ico gm-ico-card" aria-hidden="true"></span>Мгновенное зачисление денег</li>' +
@@ -319,7 +317,7 @@ window.UXMain = (function () {
       '<span class="tb-ico tb-ico-' + t.id + '" aria-hidden="true"></span>' + t.label + '</button>';
   }
   function chatWindow(kind) {
-    return CHAT() ? CHAT().html(kind) : soon();
+    return CHAT() ? CHAT().html(kind) : '';
   }
   function fitWindow() {
     var win = root && root.querySelector('.gm-window');
@@ -340,7 +338,7 @@ window.UXMain = (function () {
       '</div>';
     return '<div class="tb-box tb-main">' +
       '<div class="tb-promo">+40% к одобрению займа через Госуслуги</div>' +
-      '<div class="tb-window gm-window' + (CHAT() ? '' : ' gm-window-soon') + '" role="dialog" aria-label="Чат">' + (s.chat ? chatWindow('guest') : '') + '</div>' +
+      '<div class="tb-window gm-window" role="dialog" aria-label="Чат">' + (s.chat ? chatWindow('guest') : '') + '</div>' +
       '<div class="tb-pill"><div class="tb-tabgroup">' + tab(TABS[0], s.chat) + auth + '</div></div>' +
     '</div>';
   }
@@ -349,7 +347,7 @@ window.UXMain = (function () {
     s.preset = 0;
     var layer = s.tab === 'loan'
       ? '<div class="tb-expand"><div><div class="tb-actions"></div><div class="divider"></div></div></div>'
-      : '<div class="tb-expand' + (open ? ' is-open' : '') + '"><div><div class="tb-dwindow gm-window' + (CHAT() ? '' : ' gm-window-soon') + '" role="dialog" aria-label="' + (s.tab === 'gpt' ? 'GPT' : 'Чат') + '">' +
+      : '<div class="tb-expand' + (open ? ' is-open' : '') + '"><div><div class="tb-dwindow gm-window" role="dialog" aria-label="' + (s.tab === 'gpt' ? 'GPT' : 'Чат') + '">' +
         (open ? chatWindow(s.tab) : '') + '</div><div class="divider"></div></div></div>';
     return '<div class="tb-box tb-default"><div class="tb-pill">' + layer +
       '<nav class="tb-tabgroup" aria-label="Разделы">' + TABS.map(function (t) { return tab(t, t.id === s.tab); }).join('') + '</nav>' +
@@ -549,16 +547,7 @@ window.UXMain = (function () {
     mount: function (el, e) {
       root = el;
       env = e;
-      mode = e.mode === 'tabbar' ? 'tabbar' : 'main';
       s = parse(e.screen);
-      if (isApp() && s.view !== 'default') s = { view: 'default', tab: 'loan' };
-      var scr = root.closest('.screen');
-      if (scr) {
-        sizeWatch = new MutationObserver(function () {
-          if (isApp() && s && s.view !== 'default') go({ view: 'default', tab: 'loan' });
-        });
-        sizeWatch.observe(scr, { attributes: true, attributeFilter: ['data-size'] });
-      }
       calc = { sum: 30000, term: 16, ip: false };
       root.addEventListener('click', onClick);
       root.addEventListener('input', onInput);
@@ -575,7 +564,6 @@ window.UXMain = (function () {
     },
     unmount: function () {
       if (!root) return;
-      if (sizeWatch) { sizeWatch.disconnect(); sizeWatch = null; }
       root.removeEventListener('click', onClick);
       root.removeEventListener('input', onInput);
       root.removeEventListener('keydown', onKey);
@@ -588,9 +576,3 @@ window.UXMain = (function () {
     }
   };
 })();
-window.UXTabBar = {
-  mount: function (el, e) { e.mode = 'tabbar'; window.UXMain.mount(el, e); },
-  current: function () { return window.UXMain.current(); },
-  takeOffer: function () { window.UXMain.takeOffer(); },
-  unmount: function () { window.UXMain.unmount(); }
-};

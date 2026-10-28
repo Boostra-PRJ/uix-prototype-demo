@@ -42,6 +42,8 @@
 .btn-neutral[aria-pressed="true"] > .btn-content {
   opacity: calc(var(--contrast-neutral-opacity-hover-and-press) / 100);
 }
+.btn-neutral:disabled { background: var(--contrast-neutral-fill-disabled); cursor: not-allowed; }
+.btn-neutral:disabled > .btn-content { opacity: 0.35; }
 .btn-neutral:focus-visible {
   outline: 1px solid var(--brand-secondary-alpha-70);
   outline-offset: 2px;
