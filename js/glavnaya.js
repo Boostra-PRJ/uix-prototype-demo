@@ -207,7 +207,7 @@ window.UXMain = (function () {
   }
   function header() {
     var auth = s.view === 'default';
-    return '<header class="gm-header' + (s.menu ? ' is-open' : '') + '">' +
+    return '<header class="gm-header' + (s.menu ? ' is-open' : '') + (auth ? ' is-auth' : '') + '">' +
       '<div class="gm-head-row">' +
         (btnNeutral('gm-menu-btn', s.menu ? 'close' : 'menu', s.menu ? 'Закрыть меню' : 'Открыть меню', ' data-act="menu" aria-expanded="' + s.menu + '" aria-controls="gm-menu"')) +
         '<a class="gm-logo" href="#" data-act="top" aria-label="Бустра — на главную"><img src="' + A + 'header/logo-boostra.svg" width="103" height="32" alt=""></a>' +
@@ -474,10 +474,7 @@ window.UXMain = (function () {
   }
   function defaultBar() {
     var open = s.tab === 'chat' || s.tab === 'gpt';
-    s.preset = 0;
-    var layer = s.tab === 'loan'
-      ? '<div class="tb-expand"><div><div class="tb-actions"></div><div class="divider"></div></div></div>'
-      : '<div class="tb-expand' + (open ? ' is-open' : '') + '"><div><div class="tb-dwindow gm-window" role="dialog" aria-label="' + (s.tab === 'gpt' ? 'GPT' : 'Чат') + '">' +
+    var layer = '<div class="tb-expand' + (open ? ' is-open' : '') + '"><div><div class="tb-dwindow gm-window" role="dialog" aria-label="' + (s.tab === 'gpt' ? 'GPT' : 'Чат') + '">' +
         (open ? chatWindow(s.tab) : '') + '</div><div class="divider"></div></div></div>';
     return '<div class="tb-box tb-default"><div class="tb-pill">' + layer +
       '<nav class="tb-tabgroup" aria-label="Разделы">' + TABS.map(function (t) { return tab(t, t.id === s.tab); }).join('') + '</nav>' +
@@ -571,28 +568,8 @@ window.UXMain = (function () {
     else if (winKind()) onChat('close');
   }
   function onScroll() {
-    if (s.view === 'default' && s.tab === 'loan') { presetByScroll(); return; }
     if (s.view !== 'main') return;
     root.querySelector('.tb').setAttribute('data-auth', s.chat || scroller.scrollTop >= authAt ? 'on' : 'off');
-  }
-  var ACTIONS_STEP = 200;
-  var PRESETS = ['horizontal', 'vertical', 'icon-primary', 'input-button'];
-  var PLUS = '<span class="ico ico-plus" aria-hidden="true"></span>';
-  function pbtn(kind, size, inner) { return '<button class="btn btn-' + kind + '" type="button" data-size-button="' + size + '">' + inner + '</button>'; }
-  function preset(name) {
-    if (name === 'horizontal') return '<div class="tb-group">' + pbtn('secondary', 'large', PLUS + 'Button') + pbtn('primary', 'large', PLUS + 'Button') + '</div>';
-    if (name === 'vertical') return '<div class="tb-group tb-group-vertical">' + pbtn('secondary', 'large', 'Button') + pbtn('primary', 'large', 'Button') + '</div>';
-    if (name === 'icon-primary') return '<div class="tb-group"><button class="btn btn-secondary btn-icon-only" type="button" data-size-button="large" aria-label="Добавить">' + PLUS + '</button>' + pbtn('primary', 'large', PLUS + 'Button') + '</div>';
-    return '<div class="tb-group tb-group-input"><input class="input" type="text" placeholder="Label" aria-label="Поле">' + pbtn('primary', 'xlarge', PLUS + 'Button') + '</div>';
-  }
-  function presetByScroll() {
-    var step = Math.min(PRESETS.length, Math.floor(scroller.scrollTop / ACTIONS_STEP));
-    if (step === s.preset) return;
-    s.preset = step;
-    var expand = root.querySelector('.tb-default .tb-expand');
-    if (!expand) return;
-    if (step > 0) root.querySelector('.tb-actions').innerHTML = preset(PRESETS[step - 1]);
-    expand.classList.toggle('is-open', step > 0);
   }
   function go(next, scrollTop) {
     s = next;
@@ -726,7 +703,12 @@ window.UXMain = (function () {
       if (app()) toApp();
       env.onScreen(screenId());
     },
-    onSize: function () { if (s && app()) toApp(); },
+    onSize: function () {
+      if (!s) return;
+      if (app()) toApp();
+      var scr = root.closest('.screen');
+      if (s.view === 'default' && s.menu && scr && scr.getAttribute('data-size') === 'mobile') { s.menu = false; render(scroller.scrollTop); }
+    },
     current: function () { return s ? screenId() : ''; },
     takeOffer: function () {
       if (!s) return;
