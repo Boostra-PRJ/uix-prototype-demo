@@ -10,7 +10,6 @@
   animation: gm-blanket 0.3s ease;
 }
 @keyframes gm-blanket { from { opacity: 0; } }
-.screen[data-size="mobile"] .gm-blanket { bottom: calc(42px + var(--comp-home-indicator-safe-area-h)); }
 .gm[data-menu="on"] .gm-blanket { z-index: 5; }
 .gm[data-menu="on"] .gm-header { z-index: 6; }
 .gm[data-dim="on"] .tb-scroll { overflow: hidden; }
