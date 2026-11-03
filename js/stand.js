@@ -21,7 +21,7 @@
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
       'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay', lock: ['app'] },
       'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet', lock: ['app'] },
-      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay', lock: ['app'] }
+      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay' }
     } }
   ];
   function glowLayer(cls) {
@@ -172,12 +172,13 @@
           promo: state.promo,
           variant: flow.variant,
           onScreen: function (id) { state.screen = id; writeHash(); },
-          ui: function (id) { if (id && UI[id]) { state.ui = id; apply(); } return state.ui; },
           onPromo: function (p) { state.promo = p; writeHash(); }
         });
       } else {
         flowScreen.innerHTML = next || '';
       }
+    } else if (shown && typeof shown === 'object' && shown.onSize) {
+      shown.onSize(state.size);
     }
     syncLottie();
     slotNote.textContent = flow.note || '';
