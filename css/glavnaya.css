@@ -160,7 +160,6 @@
 .gm-menu-actions-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
 .gm-menu-actions-row > .btn { flex: 1 1 0; width: auto; padding: 0 var(--space-sm); }
 .gm-menu-actions-row > .gm-act-pay { flex-basis: 100%; }
-.screen[data-size="tablet"] .gm-menu-actions,
 .screen[data-size="desktop"] .gm-menu-actions { display: none; }
 .gm-contacts { display: flex; flex-direction: column; gap: var(--space-lg); }
 .gm-contacts > .gm-vdivider { display: none; }
@@ -688,7 +687,6 @@ a.gm-foot-btn { text-decoration: none; }
 .screen[data-size="tablet"] .gm-header { width: min(896px, calc(100% - 64px)); }
 .screen[data-size="desktop"] .gm-header { width: min(1224px, calc(100% - 216px)); }
 .gm-actions { display: none; flex-shrink: 0; gap: var(--space-sm); }
-.screen[data-size="tablet"] .gm-actions,
 .screen[data-size="desktop"] .gm-actions { display: flex; }
 .btn .gm-ico { background: currentColor; }
 .gm-ico-care { -webkit-mask-image: url("../assets/glavnaya/header/heart-handshake.svg"); mask-image: url("../assets/glavnaya/header/heart-handshake.svg"); }
