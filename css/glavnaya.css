@@ -647,8 +647,33 @@ a.gm-foot-btn { text-decoration: none; }
 .screen[data-size="desktop"] .gm-more { padding-top: 132px; }
 .screen[data-size="tablet"] .gm-more > *,
 .screen[data-size="desktop"] .gm-more > * { max-width: 560px; }
-.gm .tb-login { padding-top: 100px; }
-.gm-who { color: var(--text-bottom-secondary); text-align: center; }
+.gm-flow { padding-top: 0; }
+.gm-stub { display: flex; align-items: center; justify-content: center; min-height: 700px; padding: 100px var(--space-lg) 120px; }
+.gm-flow-login .gm-stub { min-height: 800px; padding-bottom: 60px; }
+.gm-stub .tb-wc { max-width: 400px; }
+.gm-stub-note { max-width: 311px; color: var(--text-primary-secondary); }
+.gm-stub-buttons { display: flex; flex-direction: column; gap: var(--space-sm); width: 100%; max-width: 343px; padding-top: var(--space-lg); }
+.gm-stub-buttons > .btn { width: 100%; }
+.gm-flow > .gm-more { padding-bottom: var(--space-lg); }
+.gm-legacy { display: flex; flex-direction: column; align-items: center; gap: var(--space-lg); padding-bottom: 200px; }
+.gm-legacy-shot { position: relative; width: 100%; max-width: 375px; }
+.gm-legacy-shot > img { display: block; width: 100%; height: auto; }
+.gm-hot { position: absolute; padding: 0; border: 0; border-radius: var(--radius-xl); background: transparent; cursor: pointer; }
+.gm-hot:hover { background: var(--brand-secondary-alpha-10); }
+.gm-hot:focus-visible { outline: 2px solid var(--brand-secondary-alpha-70); }
+.gm-legacy-back { width: 100%; max-width: 343px; }
+.gm-legacy-back > .btn { width: 100%; }
+.screen[data-size="tablet"] .gm-legacy,
+.screen[data-size="desktop"] .gm-legacy { padding-top: var(--space-2xl); }
+.gm-window:not(:empty)::after {
+  content: "";
+  position: absolute;
+  inset: var(--space-lg);
+  z-index: 5;
+  background: url("../assets/glavnaya/chat/bad-mark.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+.tb-window.gm-window:not(:empty)::after { bottom: var(--space-9xl); }
 @media (prefers-reduced-motion: reduce) {
   .gm-blanket, .gm-toast { animation: none; }
   .gm-switch, .gm-switch::after { transition: none; }

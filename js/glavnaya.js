@@ -8,9 +8,9 @@ window.UXMain = (function () {
     { id: 'more', label: 'Ещё' }
   ];
   var LOGIN = {
-    phone: 'Вход по номеру телефона — экран в работе',
-    tid: 'Вход через T-ID — экран в работе',
-    gos: 'Вход через Госуслуги — экран в работе'
+    phone: 'по номеру телефона',
+    tid: 'через T-ID',
+    gos: 'через Госуслуги'
   };
   var A = 'assets/glavnaya/';
   var MENU = [
@@ -84,17 +84,33 @@ window.UXMain = (function () {
   });
   var FOOT_COLS = MENU[5][1];
   var MORE = [
-    ['folder', 'Мои файлы', 'https://boostra.ru/user/upload'],
-    ['file-text', 'Документы', 'https://boostra.ru/user/docs'],
-    ['phone', 'Связаться с нами', 'https://boostra.ru/contacts'],
-    ['credit-card', 'Внести платеж', 'https://boostra.ru/user/contract'],
-    ['help-circle', 'Вопросы и ответы', 'https://boostra.ru/user/faq'],
-    ['clipboard-text', 'Форма обращения', 'https://boostra.ru/user/tickets'],
+    ['folder', 'Мои файлы', 'files'],
+    ['file-text', 'Документы', 'docs'],
+    ['phone', 'Связаться с нами', 'contacts'],
+    ['credit-card', 'Внести платеж', 'contract'],
+    ['help-circle', 'Вопросы и ответы', 'faq'],
+    ['clipboard-text', 'Форма обращения', 'tickets'],
     ['heart-handshake', 'Служба заботы', 'care'],
-    ['dots-circle', 'Прочее', 'https://boostra.ru/user/extra_docs'],
-    ['info-circle', 'Дополнительно', 'https://boostra.ru/user/additional_docs'],
-    ['device-desktop-code', 'Програмное обеспечение', '']
+    ['dots-circle', 'Прочее', 'extra'],
+    ['info-circle', 'Дополнительно', 'additional'],
+    ['device-desktop-code', 'Програмное обеспечение', 'soft']
   ];
+  var LEGACY = {
+    files: { t: 'Мои файлы' }, docs: { t: 'Документы' }, contacts: { t: 'Связаться с нами' }, contract: { t: 'Внести платеж' },
+    faq: { t: 'Вопросы и ответы' }, extra: { t: 'Прочее' }, additional: { t: 'Дополнительно' },
+    tickets: { t: 'Форма обращения', hot: [[22.7, 42.2, 55.2, 7, 'ticket-new', 'Создать обращение']] },
+    'ticket-new': { t: 'Новое обращение', hot: [[80.8, 7.6, 10.7, 5.9, 'tickets', 'Закрыть'], [11.5, 77.6, 78.7, 7.2, 'tickets', 'Создать'], [11.5, 86.8, 78.7, 7.2, 'tickets', 'Отменить']] }
+  };
+  var ROUTES = [], RIDX = {};
+  function addRoute(text, sec, url) {
+    if (RIDX[text] === undefined) { RIDX[text] = ROUTES.length; ROUTES.push([text, sec, url || '']); }
+    return RIDX[text];
+  }
+  MENU.forEach(function (sec) { sec[1].forEach(function (g) { g[1].forEach(function (it) { addRoute(it[0], sec[0] + ' · ' + g[0], it[1]); }); }); });
+  addRoute('Займ на карту', 'По типу · Оформление', 'https://boostra.ru/');
+  addRoute('Скачать приложение', 'Boostra-займы', '');
+  addRoute('Вопрос-ответ', 'Клиентам · Поддержка', '');
+  addRoute('Програмное обеспечение', 'Ещё', '');
   var DOCS = [
     ['Оферта об использовании центра обработки платежей best2pay', 'https://boostra.ru/files/docs/BEST2PAY_Offer.pdf'],
     ['Политика безопасности платежей best2pay', 'https://boostra.ru/files/docs/BEST2PAY_Security_Policy.pdf'],
@@ -114,15 +130,24 @@ window.UXMain = (function () {
     'На сайте используются файлы куки «cookies - это небольшие текстовые файлы, которые веб-сайт сохраняет на устройстве пользователя (компьютере, смартфоне, планшете) при его посещении. Они содержат данные о действиях: что пользователь нажимал, на каком языке читал страницу, входил ли под логином или без него» и другие технологии, которые позволяют идентифицировать вас, а также изучать, как вы используете веб-сайт. Дальнейшее использование этого сайта подразумевает ваше согласие на использование этих технологий.',
     'Оплатить заём можно с помощью банковских карт платёжных систем Visa, MasterCard, МИР. При оплате банковской картой безопасность платежей гарантирует центр обработки платежей Best2Pay.<br>Приём платежей происходит через защищённое безопасное соединение. Используется безопасность транспортного уровня. Компания Best2Pay соответствует международным требованиями стандарта безопасности индустрии платёжных карт, что обеспечивает безопасность оплаты. Реквизиты карты, регистрационные данные и др. не поступают в Интернет-магазин. Их обработка производится на стороне центра обработки платежей Best2Pay и полностью защищена. Никто, в том числе ООО «Финтех-Маркет», не может получить банковские и персональные данные плательщика.'
   ];
-  var CALC = { min: 1000, max: 50000, step: 1000, pdlMax: 30000, termMin: 5, termMax: 30, termFirst: 16, rate: 0.008, rateIP: 0.007 };
+  var CALC = { min: 1000, max: 50000, step: 1000, pdlMax: 30000, termMin: 5, termMax: 30, termFirst: 16, rate: 0.008 };
   var root = null, env = null, s = null, scroller = null, calc = null, authAt = 900, toastTimer = 0;
   function CHAT() { return window.UXChat || null; }
-  function soon() {
-    return '<div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
-      '<div class="tb-wc-text"><p class="tb-wc-title">Дорабатываем</p><p class="tb-wc-sub">скоро будет красиво</p></div></div>';
+  function stub(title, sub, note, buttons) {
+    return '<div class="gm-stub"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
+      '<div class="tb-wc-text"><p class="tb-wc-title">' + title + '</p><p class="tb-wc-sub">' + sub + '</p>' +
+      (note ? '<p class="gm-stub-note t-note">' + note + '</p>' : '') + '</div>' +
+      (buttons ? '<div class="gm-stub-buttons">' + buttons + '</div>' : '') + '</div></div>';
+  }
+  function sbtn(kind, act, label, attrs) {
+    return '<button class="btn btn-' + kind + '" type="button" data-size-button="xlarge" data-act="' + act + '"' + (attrs || '') + '>' + label + '</button>';
   }
   function parse(id) {
     var parts = (id || '').split('.');
+    var r = /^(main|default)-route-(\d+)$/.exec(parts[0]);
+    if (r && ROUTES[r[2]]) return r[1] === 'main' ? { view: 'main', route: Number(r[2]) } : { view: 'default', tab: '', route: Number(r[2]) };
+    var l = /^default-legacy-([a-z-]+)$/.exec(parts[0]);
+    if (l && LEGACY[l[1]]) return { view: 'default', tab: 'more', legacy: l[1] };
     var m = /^(main|main-menu|main-chat|login-(phone|tid|gos)|default-(chat|gpt|loan|card|more))$/.exec(parts[0]);
     if (!m) return { view: 'main' };
     if (m[2]) return { view: 'login', kind: m[2] };
@@ -137,6 +162,8 @@ window.UXMain = (function () {
   function winKind() { return s.view === 'main' && s.chat ? 'guest' : s.view === 'default' && (s.tab === 'chat' || s.tab === 'gpt') ? s.tab : ''; }
   function screenId() {
     if (s.view === 'login') return 'login-' + s.kind;
+    if (s.legacy) return 'default-legacy-' + s.legacy;
+    if (s.route !== undefined) return (s.view === 'default' ? 'default' : 'main') + '-route-' + s.route;
     var w = winKind(), tail = w && CHAT() ? '.' + CHAT().current(w) : '';
     if (s.view === 'default') return 'default-' + s.tab + tail;
     return (s.menu ? 'main-menu' : s.chat ? 'main-chat' : 'main') + tail;
@@ -148,11 +175,11 @@ window.UXMain = (function () {
   }
   function date(d) { return String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear(); }
   function sub(item) {
-    var text = typeof item === 'string' ? item : item[0], url = typeof item === 'string' ? '' : item[1];
-    var badge = typeof item === 'string' || !item[2] ? '' : '<span class="gm-sub-badge">' + item[2] + '</span>';
-    return url ? '<a class="gm-sub t-note" href="' + url + '" target="_blank" rel="noopener">' + text + badge + '</a>'
-      : '<a class="gm-sub t-note" href="#" data-act="soon">' + text + badge + '</a>';
+    var badge = item[2] ? '<span class="gm-sub-badge">' + item[2] + '</span>' : '';
+    return '<a class="gm-sub t-note" href="#" data-act="route" data-r="' + addRoute(item[0], '', item[1]) + '">' + item[0] + badge + '</a>';
   }
+  function ext(item) { return '<a class="gm-sub t-note" href="' + item[1] + '" target="_blank" rel="noopener">' + item[0] + '</a>'; }
+  function rlink(text, cls, inner) { return '<a class="' + cls + '" href="#" data-act="route" data-r="' + RIDX[text] + '">' + inner + '</a>'; }
   function groups(sec, flat) {
     if (flat) return sec[1].reduce(function (a, g) { return a.concat(g[1]); }, []).map(sub).join('');
     return sec[1].map(function (g) {
@@ -174,7 +201,7 @@ window.UXMain = (function () {
     return '<div class="gm-contact"><a class="gm-phone" href="tel:' + phone.replace(/\s/g, '') + '">' + phone + '</a><p class="t-caption">' + note + '</p></div>';
   }
   function actions(size) {
-    return '<button class="btn btn-semantic" type="button" data-size-button="' + size + '" data-semantic="info" data-act="soon"><span class="gm-ico gm-ico-faq" aria-hidden="true"></span>Вопрос-ответ</button>' +
+    return '<button class="btn btn-semantic" type="button" data-size-button="' + size + '" data-semantic="info" data-act="faq"><span class="gm-ico gm-ico-faq" aria-hidden="true"></span>Вопрос-ответ</button>' +
       '<button class="btn btn-semantic" type="button" data-size-button="' + size + '" data-semantic="attention" data-act="care"><span class="gm-ico gm-ico-care" aria-hidden="true"></span>Служба заботы</button>' +
       '<button class="btn btn-semantic gm-act-pay" type="button" data-size-button="' + size + '" data-semantic="success" data-act="pay">Внести платёж<span class="ico ico-plus" aria-hidden="true"></span></button>';
   }
@@ -182,12 +209,12 @@ window.UXMain = (function () {
     var auth = s.view === 'default';
     return '<header class="gm-header' + (s.menu ? ' is-open' : '') + '">' +
       '<div class="gm-head-row">' +
-        (auth ? '' : btnNeutral('gm-menu-btn', s.menu ? 'close' : 'menu', s.menu ? 'Закрыть меню' : 'Открыть меню', ' data-act="menu" aria-expanded="' + s.menu + '" aria-controls="gm-menu"')) +
+        (btnNeutral('gm-menu-btn', s.menu ? 'close' : 'menu', s.menu ? 'Закрыть меню' : 'Открыть меню', ' data-act="menu" aria-expanded="' + s.menu + '" aria-controls="gm-menu"')) +
         '<a class="gm-logo" href="#" data-act="top" aria-label="Бустра — на главную"><img src="' + A + 'header/logo-boostra.svg" width="103" height="32" alt=""></a>' +
         '<div class="gm-actions">' + actions('xlarge') + '</div>' +
         (auth ? btnNeutral('gm-profile', 'logout', 'Выйти', ' data-act="logout"') : btnNeutral('gm-profile', 'user', 'Войти', ' data-act="profile"')) +
       '</div>' +
-      (auth ? '' : '<div class="gm-menu" id="gm-menu">' +
+      ('<div class="gm-menu" id="gm-menu">' +
         '<div class="divider"></div>' +
         '<nav class="gm-catalog gm-only-narrow" aria-label="Каталог займов">' +
           slimBanner() +
@@ -207,7 +234,7 @@ window.UXMain = (function () {
     '</header>';
   }
   function slimBanner() {
-    return '<a class="gm-slim" href="#" data-act="soon"><span class="gm-slim-text"><span class="gm-slim-title">Выгоднее в приложении</span>' +
+    return '<a class="gm-slim" href="#" data-act="route" data-r="' + RIDX['Скачать приложение'] + '"><span class="gm-slim-text"><span class="gm-slim-title">Выгоднее в приложении</span>' +
       '<span class="t-note">в вашем смартфоне</span></span><span class="gm-slim-pic" aria-hidden="true"><img src="' + A + 'more/banner-app@2x.png" alt=""></span></a>';
   }
   function deskMenu() {
@@ -235,7 +262,7 @@ window.UXMain = (function () {
       '<div class="gm-desk-sub" role="tabpanel">' + inner + '</div>' +
       (cols === 2 ? '<div class="gm-desk-promo"><div class="gm-promo-pic" aria-hidden="true"><img src="' + A + 'more/promo-app@2x.png" alt=""></div>' +
         '<div class="gm-promo-content"><div class="gm-promo-text"><p class="gm-promo-title">В приложении выгоднее</p><p class="gm-body">в вашем смартфоне</p></div>' +
-        '<button class="btn btn-secondary" type="button" data-size-button="large" data-act="soon">Подробнее</button></div></div>' : '') +
+        '<button class="btn btn-secondary" type="button" data-size-button="large" data-act="route" data-r="' + RIDX['Скачать приложение'] + '">Подробнее</button></div></div>' : '') +
     '</div>';
   }
   function hero() {
@@ -276,8 +303,6 @@ window.UXMain = (function () {
           '<p class="gm-error t-caption" id="gm-term-error" hidden>Срок от 16 дней доступен со второго займа</p>' +
         '</div>' +
         '<div class="gm-pay" data-out="pay"></div>' +
-        '<div class="gm-switch-row"><label class="t-note" for="gm-ip">Самозанятый или ИП 0,7%</label>' +
-          '<input class="gm-switch" id="gm-ip" type="checkbox" role="switch" data-calc="ip" data-size-switch="20"' + (calc.ip ? ' checked' : '') + '></div>' +
       '</div>' +
       '<div class="gm-calc-buttons">' +
         '<div class="gm-cta">' +
@@ -310,14 +335,14 @@ window.UXMain = (function () {
   function footer() {
     var F = A + 'footer/', mini = s.view === 'default';
     var vk = '<a class="gm-foot-btn is-icon" href="https://vk.ru/boostra_zaim" target="_blank" rel="noopener" aria-label="ВКонтакте"><span class="gm-ico gm-ico-vk" aria-hidden="true"></span></a>';
-    var appRow = '<div class="gm-foot-app-row gm-only-mobile"><button class="btn btn-primary" type="button" data-size-button="large" data-act="soon">Скачать приложение</button>' + vk + '</div>';
+    var appRow = '<div class="gm-foot-app-row gm-only-mobile"><button class="btn btn-primary" type="button" data-size-button="large" data-act="route" data-r="' + RIDX['Скачать приложение'] + '">Скачать приложение</button>' + vk + '</div>';
     var contacts = '<div class="gm-foot-col"><p class="gm-row-title">Связь</p><div class="gm-foot-contacts">' +
       contact('8 800 333 30 73', 'Бесплатно по России') +
       '<div class="gm-contact"><a class="gm-phone" href="mailto:info@boostra.ru">info@boostra.ru</a><p class="t-caption">Почта</p></div>' +
     '</div></div>';
     var apps = '<div class="gm-foot-apps gm-only-notmobile">' +
       '<div class="gm-foot-service"><p class="gm-row-title gm-row-title-xs">Приложение</p>' +
-        '<a class="gm-foot-app" href="#" data-act="soon" aria-label="Скачать приложение Boostra-займы"><img src="' + F + 'app-icon-boostra.svg" alt=""></a></div>' +
+        '<a class="gm-foot-app" href="#" data-act="route" data-r="' + RIDX['Скачать приложение'] + '" aria-label="Скачать приложение Boostra-займы"><img src="' + F + 'app-icon-boostra.svg" alt=""></a></div>' +
       '<div class="gm-foot-service"><p class="gm-row-title gm-row-title-xs">Соцсети</p>' + vk + '</div>' +
     '</div>';
     var ombudsman = '<a class="btn btn-secondary gm-foot-ombudsman" href="https://boostra.ru/ombudsmenmfo" target="_blank" rel="noopener" data-size-button="large">' +
@@ -346,15 +371,15 @@ window.UXMain = (function () {
       }).join('') + '</nav>' +
       '<div class="gm-foot-divider"></div>' +
       '<div class="gm-foot-bottom">' +
-        '<nav class="gm-foot-col gm-foot-xs gm-only-mobile" aria-label="Документы">' + collapse('gm-fd0', 'Документы', DOCS.map(sub).join('')) + collapse('gm-fd1', 'Регулятор', REGULATOR.map(sub).join('')) + '</nav>' +
+        '<nav class="gm-foot-col gm-foot-xs gm-only-mobile" aria-label="Документы">' + collapse('gm-fd0', 'Документы', DOCS.map(ext).join('')) + collapse('gm-fd1', 'Регулятор', REGULATOR.map(ext).join('')) + '</nav>' +
         '<div class="gm-foot-legal">' +
           '<div class="gm-foot-col"><p class="gm-row-title">Юридическая информация</p>' +
             '<div class="gm-legal t-caption">' + LEGAL.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div></div>' +
           copy +
         '</div>' +
         '<div class="gm-foot-docs gm-only-notmobile">' +
-          '<div class="gm-foot-col gm-foot-xs"><p class="gm-row-title">Документы</p>' + DOCS.map(sub).join('') + '</div>' +
-          '<div class="gm-foot-col gm-foot-xs"><p class="gm-row-title">Регулятор</p>' + REGULATOR.map(sub).join('') + '</div>' +
+          '<div class="gm-foot-col gm-foot-xs"><p class="gm-row-title">Документы</p>' + DOCS.map(ext).join('') + '</div>' +
+          '<div class="gm-foot-col gm-foot-xs"><p class="gm-row-title">Регулятор</p>' + REGULATOR.map(ext).join('') + '</div>' +
         '</div>' +
       '</div>' +
     '</footer>';
@@ -363,8 +388,8 @@ window.UXMain = (function () {
     return '<div class="gm-more">' + slimBanner() + '<nav class="gm-more-list" aria-label="Ещё">' + MORE.map(function (m) {
       var inner = '<span class="gm-more-ico" style="--ico:url(' + new URL(A + 'more/' + m[0] + '.svg', document.baseURI).href + ')" aria-hidden="true"></span><span class="gm-more-title">' + m[1] + '</span><span class="gm-more-chev" aria-hidden="true"></span>';
       if (m[2] === 'care') return '<button class="gm-more-row" type="button" data-act="care">' + inner + '</button>';
-      return m[2] ? '<a class="gm-more-row" href="' + m[2] + '" target="_blank" rel="noopener">' + inner + '</a>'
-        : '<a class="gm-more-row" href="#" data-act="soon">' + inner + '</a>';
+      if (m[2] === 'soft') return '<a class="gm-more-row" href="#" data-act="route" data-r="' + RIDX['Програмное обеспечение'] + '">' + inner + '</a>';
+      return '<a class="gm-more-row" href="#" data-act="legacy" data-k="' + m[2] + '">' + inner + '</a>';
     }).join('') + '</nav></div>';
   }
   function toast() {
@@ -382,7 +407,7 @@ window.UXMain = (function () {
     var box = root.querySelector('.gm-calc');
     if (!box) return;
     var il = calc.sum > CALC.pdlMax;
-    var rate = calc.ip ? CALC.rateIP : CALC.rate;
+    var rate = CALC.rate;
     box.querySelector('[data-out="sum"]').textContent = money(calc.sum);
     box.querySelector('[data-out="term"]').textContent = calc.term;
     box.querySelector('[data-out="termUnit"]').textContent = days(calc.term);
@@ -413,8 +438,7 @@ window.UXMain = (function () {
   function onInput(e) {
     var k = e.target.getAttribute('data-calc');
     if (!k) return;
-    if (k === 'ip') calc.ip = e.target.checked;
-    else calc[k] = Number(e.target.value);
+    calc[k] = Number(e.target.value);
     recalc();
   }
   function tab(t, active) {
@@ -461,21 +485,29 @@ window.UXMain = (function () {
   }
   function bar() { return s.view === 'main' ? mainBar() : s.view === 'default' ? defaultBar() : ''; }
   function render(scrollTop) {
-    var body;
+    var body, web = app() ? '[App]' : '[Web]';
     if (s.view === 'login') {
-      body = '<div class="tb-login"><div class="tb-wc"><img src="assets/tabbar/illustration-work.png" width="146" height="146" alt="">' +
-        '<div class="tb-wc-text"><p class="tb-wc-title">Внимание!</p><p class="tb-wc-sub">' + LOGIN[s.kind] + '</p></div></div>' +
-        '<div class="tb-group tb-group-vertical" role="group" aria-labelledby="gm-who">' +
-          '<p class="t-note gm-who" id="gm-who">Войти как клиент:</p>' +
-          '<button class="btn btn-primary" type="button" data-size-button="large" data-act="next" data-client="loans">Займы уже были</button>' +
-          '<button class="btn btn-secondary" type="button" data-size-button="large" data-act="next" data-client="loan">Есть заём</button>' +
-          '<button class="btn btn-secondary" type="button" data-size-button="large" data-act="next" data-client="new">Новый клиент — займов не было</button>' +
-          '<button class="btn btn-secondary" type="button" data-size-button="large" data-ghost="on" data-act="back">Вернуться к выбору</button>' +
-        '</div></div>';
-    } else if (s.view === 'default' && s.tab === 'card') {
-      body = '<div class="tb-empty gm-soon">' + soon() + '</div>';
+      body = '<div class="gm-flow gm-flow-login">' + stub('Авторизация', web, LOGIN[s.kind],
+        sbtn('primary', 'next', 'Войти') + (app() ? '' : sbtn('secondary', 'back', 'На главную', ' data-ghost="on"'))) + '</div>';
+    } else if (s.legacy) {
+      var L = LEGACY[s.legacy];
+      body = '<div class="gm-legacy"><div class="gm-legacy-shot"><img src="' + A + 'legacy/' + s.legacy + '.png" width="375" alt="' + L.t + ': страница как сейчас">' +
+        (L.hot || []).map(function (h) {
+          return '<button class="gm-hot" type="button" data-act="legacy" data-k="' + h[4] + '" aria-label="' + h[5] + '" style="left:' + h[0] + '%;top:' + h[1] + '%;width:' + h[2] + '%;height:' + h[3] + '%"></button>';
+        }).join('') + '</div>' +
+        '<div class="gm-legacy-back">' + sbtn('secondary', 'tab', 'Назад к разделам', ' data-tab="more" data-ghost="on"') + '</div></div>';
+    } else if (s.route !== undefined) {
+      var R = ROUTES[s.route], auth = s.view === 'default';
+      body = '<div class="gm-page gm-flow">' + stub(R[0], R[1] || web, '',
+        (auth ? sbtn('primary', 'tab', 'Перейти к займу', ' data-tab="loan"') : sbtn('primary', 'login', 'Получить заём', ' data-kind="phone"')) +
+        (R[2] ? '<a class="btn btn-secondary" href="' + R[2] + '" target="_blank" rel="noopener" data-size-button="xlarge" data-ghost="on">Открыть на boostra.ru</a>' : '') +
+        (auth ? '' : sbtn('secondary', 'home', 'На главную', ' data-ghost="on"'))) + footer() + '</div>';
     } else if (s.view === 'default' && s.tab === 'more') {
-      body = morePage();
+      body = '<div class="gm-page gm-flow">' + morePage() + footer() + '</div>';
+    } else if (s.view === 'default') {
+      body = '<div class="gm-page gm-flow">' + (s.tab === 'card'
+        ? stub('Экран карты', '[Web / App]', '{Скрыть вместе с иконкой в TabBar, если нет займа или нет возможности выдать займ}')
+        : stub('Экран займа', '[Web / App]')) + footer() + '</div>';
     } else {
       body = page();
     }
@@ -483,7 +515,7 @@ window.UXMain = (function () {
       '<div class="tb gm" data-auth="' + (s.view === 'main' && s.chat ? 'on' : 'off') + '" data-window="' + (s.view === 'main' && s.chat ? 'on' : 'off') +
         '" data-menu="' + (s.menu ? 'on' : 'off') + '" data-dim="' + (dim() ? 'on' : 'off') + '">' +
         '<div class="tb-scroll tb-enter" tabindex="-1">' + body + '</div>' +
-        (s.view === 'login' ? '' : header()) +
+        (s.view === 'login' || s.legacy ? '' : header()) +
         (s.toast ? toast() : '') +
         (dim() ? '<div class="gm-blanket" data-act="dim" aria-hidden="true"></div>' : '') +
         '<div class="tb-bottom">' +
@@ -502,7 +534,7 @@ window.UXMain = (function () {
         var cta = ctaEl.getBoundingClientRect(), sr = scroller.getBoundingClientRect();
         var k = sr.height / scroller.offsetHeight || 1;
         authAt = (cta.bottom - sr.top) / k + scroller.scrollTop + 300;
-      }
+      } else authAt = 0;
       fitWindow();
       if (CHAT()) CHAT().mounted(root.querySelector('.gm-window'), s, onChat);
     }
@@ -605,7 +637,16 @@ window.UXMain = (function () {
       render(y0);
       root.querySelector('.gm-desk-item[aria-selected="true"]').focus();
     } else if (act === 'pay') {
-      go(s.view === 'default' ? { view: 'default', tab: 'loan' } : { view: 'login', kind: 'phone' });
+      go(s.view === 'default' ? { view: 'default', tab: 'more', legacy: 'contract' } : { view: 'login', kind: 'phone' });
+    } else if (act === 'faq') {
+      go(s.view === 'default' ? { view: 'default', tab: 'more', legacy: 'faq' } : { view: 'main', route: RIDX['Вопросы и ответы'] });
+    } else if (act === 'route') {
+      var ri = Number(el.getAttribute('data-r'));
+      go(s.view === 'default' ? { view: 'default', tab: '', route: ri } : { view: 'main', route: ri });
+    } else if (act === 'legacy') {
+      go({ view: 'default', tab: 'more', legacy: el.getAttribute('data-k') });
+    } else if (act === 'home') {
+      go({ view: 'main' }, 0);
     } else if (act === 'care') {
       if (CHAT()) CHAT().open(s.view === 'default' ? 'chat' : 'guest');
       go(s.view === 'default' ? { view: 'default', tab: 'chat' } : { view: 'main', chat: true }, scroller.scrollTop);
@@ -629,12 +670,17 @@ window.UXMain = (function () {
       }
     } else if (act === 'top') {
       e.preventDefault();
-      scroller.scrollTo({ top: 0, behavior: 'smooth' });
+      if (s.view === 'default') go({ view: 'default', tab: 'loan' }, 0);
+      else if (s.route !== undefined || s.menu) go({ view: 'main' }, 0);
+      else scroller.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (act === 'tab') {
       var id = el.getAttribute('data-tab');
-      if (s.view === 'main') {
+      if (s.view === 'default' && (s.route !== undefined || s.legacy)) {
+        if ((id === 'chat' || id === 'gpt') && CHAT()) CHAT().open(id);
+        go({ view: 'default', tab: id }, 0);
+      } else if (s.view === 'main') {
         if (!s.chat && CHAT()) CHAT().open('guest');
-        go({ view: 'main', chat: !s.chat }, scroller.scrollTop);
+        go({ view: 'main', chat: !s.chat, route: s.route }, scroller.scrollTop);
       } else if (id !== s.tab) {
         if ((id === 'chat' || id === 'gpt') && CHAT()) CHAT().open(id);
         go({ view: 'default', tab: id }, scroller.scrollTop);
@@ -646,11 +692,10 @@ window.UXMain = (function () {
     } else if (act === 'profile') {
       if (s.view === 'main') go({ view: 'login', kind: 'phone' });
     } else if (act === 'get') {
-      go({ view: 'main' }, 0);
+      go(s.view === 'default' ? { view: 'default', tab: 'loan' } : { view: 'main' }, 0);
     } else if (act === 'back') {
       go(app() ? enter() : { view: 'main' });
     } else if (act === 'next') {
-      if (CHAT()) CHAT().client(el.getAttribute('data-client'));
       go(enter());
     }
   }
@@ -672,7 +717,7 @@ window.UXMain = (function () {
       root = el;
       env = e;
       s = parse(e.screen);
-      calc = { sum: 30000, term: 16, ip: false };
+      calc = { sum: 30000, term: 16 };
       root.addEventListener('click', onClick);
       root.addEventListener('input', onInput);
       root.addEventListener('keydown', onKey);
