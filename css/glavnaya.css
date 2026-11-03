@@ -45,9 +45,7 @@
 .gm-head-row > .btn-neutral { flex-shrink: 0; }
 .gm-head-row > .gm-menu-btn { margin-right: var(--space-lg); }
 .screen[data-size="app"] .gm-menu-btn,
-.screen[data-size="app"] .gm-menu,
-.screen[data-size="mobile"] .gm-header.is-auth .gm-menu-btn,
-.screen[data-size="mobile"] .gm-header.is-auth .gm-menu { display: none; }
+.screen[data-size="app"] .gm-menu { display: none; }
 .gm-logo { flex: 1 1 0; min-width: 0; padding-left: var(--space-lg); }
 .gm-logo img { display: block; width: 103px; height: 32px; }
 .gm-head-row > .gm-profile { margin-left: var(--space-lg); }

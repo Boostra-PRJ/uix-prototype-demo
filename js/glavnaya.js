@@ -207,14 +207,14 @@ window.UXMain = (function () {
   }
   function header() {
     var auth = s.view === 'default';
-    return '<header class="gm-header' + (s.menu ? ' is-open' : '') + (auth ? ' is-auth' : '') + '">' +
+    return '<header class="gm-header' + (s.menu ? ' is-open' : '') + '">' +
       '<div class="gm-head-row">' +
-        (btnNeutral('gm-menu-btn', s.menu ? 'close' : 'menu', s.menu ? 'Закрыть меню' : 'Открыть меню', ' data-act="menu" aria-expanded="' + s.menu + '" aria-controls="gm-menu"')) +
+        (auth ? '' : btnNeutral('gm-menu-btn', s.menu ? 'close' : 'menu', s.menu ? 'Закрыть меню' : 'Открыть меню', ' data-act="menu" aria-expanded="' + s.menu + '" aria-controls="gm-menu"')) +
         '<a class="gm-logo" href="#" data-act="top" aria-label="Бустра — на главную"><img src="' + A + 'header/logo-boostra.svg" width="103" height="32" alt=""></a>' +
-        '<div class="gm-actions">' + actions('xlarge') + '</div>' +
+        (auth ? '' : '<div class="gm-actions">' + actions('xlarge') + '</div>') +
         (auth ? btnNeutral('gm-profile', 'logout', 'Выйти', ' data-act="logout"') : btnNeutral('gm-profile', 'user', 'Войти', ' data-act="profile"')) +
       '</div>' +
-      ('<div class="gm-menu" id="gm-menu">' +
+      (auth ? '' : '<div class="gm-menu" id="gm-menu">' +
         '<div class="divider"></div>' +
         '<nav class="gm-catalog gm-only-narrow" aria-label="Каталог займов">' +
           slimBanner() +
@@ -703,12 +703,7 @@ window.UXMain = (function () {
       if (app()) toApp();
       env.onScreen(screenId());
     },
-    onSize: function () {
-      if (!s) return;
-      if (app()) toApp();
-      var scr = root.closest('.screen');
-      if (s.view === 'default' && s.menu && scr && scr.getAttribute('data-size') === 'mobile') { s.menu = false; render(scroller.scrollTop); }
-    },
+    onSize: function () { if (s && app()) toApp(); },
     current: function () { return s ? screenId() : ''; },
     takeOffer: function () {
       if (!s) return;
