@@ -20,4 +20,4 @@
 }
 .splash-app:focus-visible { outline: 2px solid var(--brand-always-dark-ink); outline-offset: 2px; }
 .splash-app-icon { display: block; width: 60px; height: 60px; border-radius: 13.5px; }
-.splash-app-name { color: var(--palette-peak-always-alpha-10); }
+.splash-app-name { color: var(--text-always-dark-default); }

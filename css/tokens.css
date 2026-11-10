@@ -651,6 +651,7 @@
   --palette-always-dark-brand-ink: #659bfc;
   --palette-always-dark-brand-primary: #2e79ff;
   --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-default: #f4f4f6;
   --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #fff8f2;
   --palette-attention-10: #ff780a;
@@ -1491,6 +1492,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-default: var(--palette-always-dark-text-default);
   --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
@@ -2110,6 +2112,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-default: var(--palette-always-dark-text-default);
   --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
@@ -2677,6 +2680,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-default: var(--palette-always-dark-text-default);
   --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
@@ -3244,6 +3248,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-default: var(--palette-always-dark-text-default);
   --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
@@ -3811,6 +3816,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-default: var(--palette-always-dark-text-default);
   --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
@@ -4453,6 +4459,7 @@
   --palette-always-dark-brand-ink: #659bfc;
   --palette-always-dark-brand-primary: #2e79ff;
   --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-default: #f4f4f6;
   --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #fff8f2;
   --palette-attention-10: #ff780a;
@@ -4869,6 +4876,7 @@
   --palette-always-dark-brand-ink: #659bfc;
   --palette-always-dark-brand-primary: #2e79ff;
   --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-default: #f4f4f6;
   --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #281b11;
   --palette-attention-10: #fe933d;
@@ -5285,6 +5293,7 @@
   --palette-always-dark-brand-ink: #659bfc;
   --palette-always-dark-brand-primary: #2e79ff;
   --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-default: #f4f4f6;
   --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #1a1a1a;
   --palette-attention-10: #ffffff;
@@ -5701,6 +5710,7 @@
   --palette-always-dark-brand-ink: #659bfc;
   --palette-always-dark-brand-primary: #2e79ff;
   --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-default: #f4f4f6;
   --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: rgba(0,40,153,0.1);
   --palette-attention-10: #002899;
