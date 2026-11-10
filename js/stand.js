@@ -21,7 +21,8 @@
       'default': { label: 'Default', icon: 'assets/flow-default.svg', screen: 'uix-default', chrome: false },
       'first-free': { label: 'First Free [PROMO]', icon: 'assets/flow-first-free.svg', screen: 'first-free', chrome: 'overlay', lock: ['app'] },
       'first-free-2': { label: 'First Free [PROMO] · 2', icon: 'assets/flow-first-free.svg', screen: 'first-free-sheet', chrome: 'overlay', variant: 'sheet', lock: ['app'] },
-      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay' }
+      'glavnaya': { label: 'Главная', icon: 'assets/flow-glavnaya.svg', screen: 'glavnaya', chrome: 'overlay' },
+      'splash': { label: 'Сплэш', icon: 'assets/flow-splash.svg', screen: 'splash', lock: ['mobile', 'tablet', 'desktop'] }
     } }
   ];
   function glowLayer(cls) {
@@ -102,6 +103,7 @@
   }
   if (window.UXFirstFree) SCREENS['first-free'] = SCREENS['first-free-sheet'] = window.UXFirstFree;
   if (window.UXMain) SCREENS.glavnaya = window.UXMain;
+  if (window.UXSplash) SCREENS.splash = window.UXSplash;
   var FLOW = {};
   FLOW_GROUPS.forEach(function (g) { Object.keys(g.items).forEach(function (k) { FLOW[k] = g.items[k]; }); });
   var state = { ui: 'light', style: 'boostra', size: 'app', flow: 'default', screen: '', promo: '', tasks: false };
@@ -137,7 +139,9 @@
   }
   function apply() {
     var lock = FLOW[state.flow].lock || [];
-    if (lock.indexOf(state.size) >= 0) state.size = 'mobile';
+    if (lock.indexOf(state.size) >= 0) {
+      state.size = Object.keys(SIZE).filter(function (k) { return lock.indexOf(k) < 0; })[0] || 'mobile';
+    }
     var ui = UI[state.ui], size = SIZE[state.size];
     screen.setAttribute('data-color-scheme', ui.scheme);
     screen.setAttribute('data-typography', ui.type);
