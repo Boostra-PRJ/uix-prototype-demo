@@ -12,3 +12,12 @@
 .splash-trace { fill: var(--brand-always-dark-primary-alpha-20); }
 .splash-mark .seg { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .splash-label { color: var(--text-always-dark-quaternary); opacity: .6; }
+.splash-home { align-items: flex-start; padding-top: 25%; }
+.splash-app {
+  display: grid; justify-items: center; gap: var(--space-xs);
+  padding: var(--space-xs); border: 0; background: none; cursor: pointer; font: inherit; color: inherit;
+  border-radius: var(--radius-md, 8px);
+}
+.splash-app:focus-visible { outline: 2px solid var(--brand-always-dark-ink); outline-offset: 2px; }
+.splash-app-icon { display: block; width: 60px; height: 60px; border-radius: 13.5px; }
+.splash-app-name { color: var(--palette-peak-always-alpha-10); }

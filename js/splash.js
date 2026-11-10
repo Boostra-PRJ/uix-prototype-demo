@@ -18,7 +18,29 @@
     parent.appendChild(p);
     return p;
   }
-  function mount(host) {
+  var current = 'home', hostEl = null, onScreenCb = null;
+  function show(id) {
+    current = id;
+    if (root) { cancelAnimationFrame(raf); raf = 0; root.remove(); root = null; }
+    if (id === 'splash') mountSplash(hostEl); else mountHome(hostEl);
+    if (onScreenCb) onScreenCb(id);
+  }
+  function mountHome(host) {
+    root = document.createElement('div');
+    root.className = 'splash splash-home';
+    root.innerHTML =
+      '<button class="splash-app" type="button" aria-label="Boostra — открыть приложение">' +
+        '<img class="splash-app-icon" src="assets/splash/app-icon.png" width="60" height="60" alt="">' +
+        '<span class="splash-app-name t-caption">Boostra</span>' +
+      '</button>';
+    host.appendChild(root);
+    root.querySelector('.splash-app').addEventListener('click', function () { show('splash'); });
+  }
+  function mount(host, opts) {
+    hostEl = host; onScreenCb = opts && opts.onScreen;
+    show(opts && opts.screen === 'splash' ? 'splash' : 'home');
+  }
+  function mountSplash(host) {
     root = document.createElement('div');
     root.className = 'splash';
     root.innerHTML =
@@ -79,7 +101,7 @@
   function unmount() {
     cancelAnimationFrame(raf); raf = 0;
     if (root) root.remove();
-    root = null;
+    root = null; hostEl = null; onScreenCb = null;
   }
-  window.UXSplash = { mount: mount, unmount: unmount, current: function () { return ''; } };
+  window.UXSplash = { mount: mount, unmount: unmount, current: function () { return current; } };
 })();
