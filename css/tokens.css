@@ -40,6 +40,7 @@
   --always-peak-alpha-60: var(--palette-peak-always-alpha-7);
   --always-peak-alpha-70: var(--palette-peak-always-alpha-8);
   --always-peak-alpha-80: var(--palette-peak-always-alpha-9);
+  --bg-always-dark: var(--palette-always-dark-background);
   --bg-grouped-primary: var(--palette-backgrounds-grouped-primary);
   --bg-grouped-secondary-w: var(--palette-backgrounds-grouped-secondary);
   --bg-grouped-tertiary: var(--palette-backgrounds-grouped-tertiary);
@@ -119,6 +120,10 @@
   --border-width-1: 1px;
   --border-width-2: 2px;
   --border-width-3: 3px;
+  --brand-always-dark-deep: var(--palette-always-dark-brand-deep);
+  --brand-always-dark-ink: var(--palette-always-dark-brand-ink);
+  --brand-always-dark-primary: var(--palette-always-dark-brand-primary);
+  --brand-always-dark-primary-alpha-20: var(--palette-always-dark-brand-primary-alpha-20);
   --brand-attention: var(--palette-attention-9);
   --brand-attention-10: var(--palette-attention-2);
   --brand-attention-20: var(--palette-attention-3);
@@ -641,6 +646,12 @@
   --outlined-button-stroke-width: var(--border-width-0);
   --outlined-secondary-fill-default: var(--contrast-secondary-fill-default);
   --outlined-secondary-fill-hover-and-press: var(--contrast-secondary-fill-hover-and-press-hover);
+  --palette-always-dark-background: #111113;
+  --palette-always-dark-brand-deep: #adc8f9;
+  --palette-always-dark-brand-ink: #659bfc;
+  --palette-always-dark-brand-primary: #2e79ff;
+  --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #fff8f2;
   --palette-attention-10: #ff780a;
   --palette-attention-11: #c95400;
@@ -1480,6 +1491,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
   --text-attention-secondary: var(--palette-attention-alpha-7);
@@ -1740,6 +1752,7 @@
   --always-peak-alpha-60: var(--palette-peak-always-alpha-7);
   --always-peak-alpha-70: var(--palette-peak-always-alpha-8);
   --always-peak-alpha-80: var(--palette-peak-always-alpha-9);
+  --bg-always-dark: var(--palette-always-dark-background);
   --bg-grouped-primary: var(--palette-backgrounds-grouped-primary);
   --bg-grouped-secondary-w: var(--palette-backgrounds-grouped-secondary);
   --bg-grouped-tertiary: var(--palette-backgrounds-grouped-tertiary);
@@ -1778,6 +1791,10 @@
   --border-tertiary-default: var(--palette-tertiary-alpha-4);
   --border-tertiary-quaternary: var(--palette-tertiary-9);
   --border-tertiary-secondary: var(--palette-tertiary-alpha-5);
+  --brand-always-dark-deep: var(--palette-always-dark-brand-deep);
+  --brand-always-dark-ink: var(--palette-always-dark-brand-ink);
+  --brand-always-dark-primary: var(--palette-always-dark-brand-primary);
+  --brand-always-dark-primary-alpha-20: var(--palette-always-dark-brand-primary-alpha-20);
   --brand-attention: var(--palette-attention-9);
   --brand-attention-10: var(--palette-attention-2);
   --brand-attention-20: var(--palette-attention-3);
@@ -2093,6 +2110,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
   --text-attention-secondary: var(--palette-attention-alpha-7);
@@ -2301,6 +2319,7 @@
   --always-peak-alpha-60: var(--palette-peak-always-alpha-7);
   --always-peak-alpha-70: var(--palette-peak-always-alpha-8);
   --always-peak-alpha-80: var(--palette-peak-always-alpha-9);
+  --bg-always-dark: var(--palette-always-dark-background);
   --bg-grouped-primary: var(--palette-backgrounds-grouped-primary);
   --bg-grouped-secondary-w: var(--palette-backgrounds-grouped-secondary);
   --bg-grouped-tertiary: var(--palette-backgrounds-grouped-tertiary);
@@ -2339,6 +2358,10 @@
   --border-tertiary-default: var(--palette-tertiary-alpha-4);
   --border-tertiary-quaternary: var(--palette-tertiary-9);
   --border-tertiary-secondary: var(--palette-tertiary-alpha-5);
+  --brand-always-dark-deep: var(--palette-always-dark-brand-deep);
+  --brand-always-dark-ink: var(--palette-always-dark-brand-ink);
+  --brand-always-dark-primary: var(--palette-always-dark-brand-primary);
+  --brand-always-dark-primary-alpha-20: var(--palette-always-dark-brand-primary-alpha-20);
   --brand-attention: var(--palette-attention-9);
   --brand-attention-10: var(--palette-attention-2);
   --brand-attention-20: var(--palette-attention-3);
@@ -2654,6 +2677,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
   --text-attention-secondary: var(--palette-attention-alpha-7);
@@ -2862,6 +2886,7 @@
   --always-peak-alpha-60: var(--palette-peak-always-alpha-7);
   --always-peak-alpha-70: var(--palette-peak-always-alpha-8);
   --always-peak-alpha-80: var(--palette-peak-always-alpha-9);
+  --bg-always-dark: var(--palette-always-dark-background);
   --bg-grouped-primary: var(--palette-backgrounds-grouped-primary);
   --bg-grouped-secondary-w: var(--palette-backgrounds-grouped-secondary);
   --bg-grouped-tertiary: var(--palette-backgrounds-grouped-tertiary);
@@ -2900,6 +2925,10 @@
   --border-tertiary-default: var(--palette-tertiary-alpha-4);
   --border-tertiary-quaternary: var(--palette-tertiary-9);
   --border-tertiary-secondary: var(--palette-tertiary-alpha-5);
+  --brand-always-dark-deep: var(--palette-always-dark-brand-deep);
+  --brand-always-dark-ink: var(--palette-always-dark-brand-ink);
+  --brand-always-dark-primary: var(--palette-always-dark-brand-primary);
+  --brand-always-dark-primary-alpha-20: var(--palette-always-dark-brand-primary-alpha-20);
   --brand-attention: var(--palette-attention-9);
   --brand-attention-10: var(--palette-attention-2);
   --brand-attention-20: var(--palette-attention-3);
@@ -3215,6 +3244,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
   --text-attention-secondary: var(--palette-attention-alpha-7);
@@ -3423,6 +3453,7 @@
   --always-peak-alpha-60: var(--palette-peak-always-alpha-7);
   --always-peak-alpha-70: var(--palette-peak-always-alpha-8);
   --always-peak-alpha-80: var(--palette-peak-always-alpha-9);
+  --bg-always-dark: var(--palette-always-dark-background);
   --bg-grouped-primary: var(--palette-backgrounds-grouped-primary);
   --bg-grouped-secondary-w: var(--palette-backgrounds-grouped-secondary);
   --bg-grouped-tertiary: var(--palette-backgrounds-grouped-tertiary);
@@ -3461,6 +3492,10 @@
   --border-tertiary-default: var(--palette-tertiary-alpha-4);
   --border-tertiary-quaternary: var(--palette-tertiary-9);
   --border-tertiary-secondary: var(--palette-tertiary-alpha-5);
+  --brand-always-dark-deep: var(--palette-always-dark-brand-deep);
+  --brand-always-dark-ink: var(--palette-always-dark-brand-ink);
+  --brand-always-dark-primary: var(--palette-always-dark-brand-primary);
+  --brand-always-dark-primary-alpha-20: var(--palette-always-dark-brand-primary-alpha-20);
   --brand-attention: var(--palette-attention-9);
   --brand-attention-10: var(--palette-attention-2);
   --brand-attention-20: var(--palette-attention-3);
@@ -3776,6 +3811,7 @@
   --system-tertiary-hover: var(--palette-tertiary-8);
   --system-tertiary-press: var(--palette-tertiary-10);
   --system-textmatch: var(--vibe-tertiary-alpha-5);
+  --text-always-dark-quaternary: var(--palette-always-dark-text-quaternary);
   --text-attention-default: var(--palette-attention-9);
   --text-attention-quaternary: var(--palette-attention-alpha-4);
   --text-attention-secondary: var(--palette-attention-alpha-7);
@@ -4412,6 +4448,12 @@
   --size-tab-size: var(--body-size);
 }
 [data-color-scheme="light"] {
+  --palette-always-dark-background: #111113;
+  --palette-always-dark-brand-deep: #adc8f9;
+  --palette-always-dark-brand-ink: #659bfc;
+  --palette-always-dark-brand-primary: #2e79ff;
+  --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #fff8f2;
   --palette-attention-10: #ff780a;
   --palette-attention-11: #c95400;
@@ -4822,6 +4864,12 @@
   --palette-violet-alpha-9: #aa5aff;
 }
 [data-color-scheme="dark"] {
+  --palette-always-dark-background: #111113;
+  --palette-always-dark-brand-deep: #adc8f9;
+  --palette-always-dark-brand-ink: #659bfc;
+  --palette-always-dark-brand-primary: #2e79ff;
+  --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #281b11;
   --palette-attention-10: #fe933d;
   --palette-attention-11: #fca55f;
@@ -5232,6 +5280,12 @@
   --palette-violet-alpha-9: #b978ff;
 }
 [data-color-scheme="availability-black"] {
+  --palette-always-dark-background: #111113;
+  --palette-always-dark-brand-deep: #adc8f9;
+  --palette-always-dark-brand-ink: #659bfc;
+  --palette-always-dark-brand-primary: #2e79ff;
+  --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: #1a1a1a;
   --palette-attention-10: #ffffff;
   --palette-attention-11: #ffffff;
@@ -5642,6 +5696,12 @@
   --palette-violet-alpha-9: #ffffff;
 }
 [data-color-scheme="availability-blue"] {
+  --palette-always-dark-background: #111113;
+  --palette-always-dark-brand-deep: #adc8f9;
+  --palette-always-dark-brand-ink: #659bfc;
+  --palette-always-dark-brand-primary: #2e79ff;
+  --palette-always-dark-brand-primary-alpha-20: rgba(46,121,255,0.2);
+  --palette-always-dark-text-quaternary: rgba(244,244,246,0.35);
   --palette-attention-1: rgba(0,40,153,0.1);
   --palette-attention-10: #002899;
   --palette-attention-11: #002899;

@@ -7,9 +7,9 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var raf = 0, root = null;
   function segColor(t) {
-    if (t < 0.12) return 'var(--brand-primary-deep)';
-    if (t < 0.45) return 'color-mix(in srgb, var(--brand-primary-deep) ' + Math.round((1 - (t - 0.12) / 0.33) * 100) + '%, var(--brand-primary-ink))';
-    return 'color-mix(in srgb, var(--brand-primary-ink) ' + Math.round((1 - (t - 0.45) / 0.55) * 100) + '%, var(--brand-primary))';
+    if (t < 0.12) return 'var(--brand-always-dark-deep)';
+    if (t < 0.45) return 'color-mix(in srgb, var(--brand-always-dark-deep) ' + Math.round((1 - (t - 0.12) / 0.33) * 100) + '%, var(--brand-always-dark-ink))';
+    return 'color-mix(in srgb, var(--brand-always-dark-ink) ' + Math.round((1 - (t - 0.45) / 0.55) * 100) + '%, var(--brand-always-dark-primary))';
   }
   function path(parent, cls) {
     var p = document.createElementNS(NS, 'path');
@@ -51,7 +51,7 @@
     G1.forEach(function (p, i) {
       var t = i / (P.segs - 1);
       p.style.strokeWidth = P.width * 1.7 * (1 - 0.4 * t);
-      p.style.stroke = 'var(--brand-primary)';
+      p.style.stroke = 'var(--brand-always-dark-primary)';
       p.style.strokeOpacity = ((i < 2 ? 0 : 1) * Math.pow(1 - t, 1.4) * 0.5).toFixed(3);
       p.setAttribute('stroke-dasharray', da);
     });

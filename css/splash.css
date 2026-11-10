@@ -5,10 +5,10 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--bg-primary-gw);
+  background: var(--bg-always-dark);
 }
 .splash-stage { display: grid; justify-items: center; gap: var(--space-2xl); transform: translateY(-4%); }
 .splash-mark { display: block; overflow: visible; }
-.splash-trace { fill: var(--brand-primary-alpha-20); }
+.splash-trace { fill: var(--brand-always-dark-primary-alpha-20); }
 .splash-mark .seg { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.splash-label { color: var(--text-bottom-quaternary); opacity: .6; }
+.splash-label { color: var(--text-always-dark-quaternary); opacity: .6; }
